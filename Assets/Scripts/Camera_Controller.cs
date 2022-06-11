@@ -16,6 +16,6 @@ public class Camera_Controller : MonoBehaviour
     }
     private void Update()
     {
-        transform.position = _car.transform.position + _offset;
+        transform.LookAt(_car.transform);
     }
 }
