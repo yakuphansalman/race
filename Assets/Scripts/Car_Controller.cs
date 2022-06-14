@@ -10,21 +10,21 @@ public class Car_Controller : MonoBehaviour
     [SerializeField] private float _direction;
     [SerializeField] private float _force;
     [SerializeField] private float _rotationForce;
-    [SerializeField] private Vector3[] _turnDistances;
-    [SerializeField] private Vector3 _activeLength;
+    [SerializeField] private float _angle;
+    [SerializeField] private float _cMultiplier;
 
     private Vector3 _speed;
-    [SerializeField] private GameObject[] _turns;
-    [SerializeField] private GameObject _activeTurn;
+    [SerializeField] private Vector3 _currentVector;
+    [SerializeField] private Vector3 _previousVector;
+    [SerializeField] private Vector3 _centripitalForce;
+
+
+
 
 
     private void Start()
     {
         _rB = this.gameObject.GetComponent<Rigidbody>();
-        _turns = new GameObject[2];
-        _turnDistances = new Vector3[2];
-        _turns[0] = GameObject.Find("Turn_1");
-        _turns[1] = GameObject.Find("Turn_2");
     }
     private void Update()
     {
@@ -32,23 +32,33 @@ public class Car_Controller : MonoBehaviour
         SetDirection();
         Accelarate();
         Rotate();
-        CheckTurns();
         CreateCentripitalForce();
     }
 
     private void Rotate()
     {
-        if (_rB.velocity.magnitude != 0)
+        float multiplier;
+        if (_speed.magnitude <= 5)
+        {
+            multiplier = _speed.magnitude * 0.01f;
+        }
+        else
+        {
+            multiplier = 1 / _speed.magnitude;
+        }
+        if (_speed.magnitude > 0)
         {
             if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(transform.up * _rotationForce * _speed.magnitude * _direction);
+            {
+                transform.Rotate(transform.up * _rotationForce * _direction * multiplier);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(transform.up * _rotationForce * -1 * _direction * multiplier);
+            }
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(transform.up * _rotationForce * -1 * _speed.magnitude * _direction);
-        }
-        }
+        
+
     }
     private void Accelarate()
     {
@@ -74,24 +84,26 @@ public class Car_Controller : MonoBehaviour
         }
     }
 
-    private void CheckTurns()
-    {
-        for (int i = 0; i < _turns.Length; i++)
-        {
-            _turnDistances[i] = (transform.position - _turns[i].transform.position);
-            for (int j = 0; j < _turns.Length; j++)
-            {
-                if (_turnDistances[i].magnitude < _turnDistances[j].magnitude)
-                {
-                    _activeTurn = _turns[i];
-                    _activeLength = _turnDistances[i];
-                }
-            }
-        }
-    }
     
     private void CreateCentripitalForce()
     {
-        _rB.AddForce(new Vector3(_activeLength.x , 0 , _activeLength.z) * _speed.magnitude * _speed.magnitude * 0.002f / _activeLength.magnitude, ForceMode.Force);
+        if (!Input.GetKey(KeyCode.D) || !Input.GetKey(KeyCode.A))
+        {
+            _angle = 0;
+        }
+        _previousVector = _currentVector;
+        _currentVector = transform.forward;
+        _angle = Vector3.Angle(_previousVector, _currentVector);
+
+        _centripitalForce = transform.right * _angle * _speed.magnitude * _speed.magnitude * _cMultiplier;
+        if (Input.GetKey(KeyCode.A))
+        {
+            _rB.AddForce(_centripitalForce, ForceMode.Force);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            _rB.AddForce(-_centripitalForce, ForceMode.Force);
+        }
+        Debug.Log(_centripitalForce.magnitude);
     }
 }
