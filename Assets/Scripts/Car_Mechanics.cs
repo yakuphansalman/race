@@ -6,8 +6,10 @@ public class Car_Mechanics : MonoBehaviour
 {
     private Rigidbody _rB;
 
-    private int _gear;
 
+    [SerializeField] private bool _canAcc = true;
+
+    private int _gear;
     
     [SerializeField] private float[] _gearLimits;
     [SerializeField] private float _gearForce;
@@ -15,6 +17,7 @@ public class Car_Mechanics : MonoBehaviour
     private float _speed;
 
     public float gearForce => _gearForce;
+    public float[] gearLimits => _gearLimits;
     public int gear => _gear;
 
     private void Start()
@@ -31,11 +34,18 @@ public class Car_Mechanics : MonoBehaviour
         _speed = _rB.velocity.magnitude;
         for (int i = 0; i < _gearLimits.Length -1; i++)
         {
-            if (_speed > _gearLimits[i] && _speed <= _gearLimits[i + 1])
+            if (_speed > _gearLimits[i] && _speed <= _gearLimits[i + 1] && _canAcc)
             {
                 _gearForce = Mathf.Pow(_gearMultiplier, i+1);
-                _gear = i+1;
+                StartCoroutine(GearUpAndDown(i + 1));
             }
         }
+    }
+    private IEnumerator GearUpAndDown(int gear)
+    {
+        _canAcc = false;
+        _gear = gear;
+        yield return new WaitForSeconds(0.5f);
+        _canAcc = true;
     }
 }

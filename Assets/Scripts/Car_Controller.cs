@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class Car_Controller : MonoBehaviour
 {
+    
+
+    private Rigidbody _rB;
+    [SerializeField] private Car_Preferences_SO _carPrefs = null;
+    private Car_Mechanics _carMechanics;
+
+    private float _direction;
+    private float _speed;
+
+    public float direction => _direction;
+
     #region Singleton
     private static Car_Controller instance = null;
     public static Car_Controller Instance
@@ -17,15 +28,21 @@ public class Car_Controller : MonoBehaviour
             return instance;
         }
     }
+   
+
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
     #endregion
-
-    private Rigidbody _rB;
-    [SerializeField] private Car_Preferences_SO _carPrefs = null;
-    private Car_Mechanics _carMechanics;
-
-    private float _direction;
-    
-
     private void Start()
     {
         _rB = this.gameObject.GetComponent<Rigidbody>();
@@ -33,6 +50,7 @@ public class Car_Controller : MonoBehaviour
     }
     private void Update()
     {
+        _speed = _rB.velocity.magnitude;
         SetDirection();
         Accelerate();
         Rotate();
@@ -42,20 +60,15 @@ public class Car_Controller : MonoBehaviour
     private void Rotate()
     {
         float multiplier;
-        if (_rB.velocity.magnitude <= 5)
+        if (_speed >= 0 && _speed < 1)
         {
-            multiplier = _rB.velocity.magnitude * 0.01f;
+            multiplier = Mathf.Pow(_speed, 1 / 10);
         }
         else
         {
-            multiplier = 1 / _rB.velocity.magnitude;
+            multiplier = 1 / Mathf.Pow(_speed, 1/2);
         }
-        if (_rB.velocity.magnitude > 0)
-        {
-            transform.Rotate(Input_Manager.Instance.i_Horizontal * transform.up * _carPrefs.rotationForce * _direction * multiplier);
-        }
-        
-
+        transform.Rotate(Input_Manager.Instance.i_Horizontal * transform.up * _carPrefs.rotationForce * _direction * multiplier);
     }
     private void Accelerate()
     {
@@ -72,12 +85,11 @@ public class Car_Controller : MonoBehaviour
         {
             force = _carPrefs.force;
         }
-        if (_rB.velocity.magnitude < _carPrefs.forceLimit && _rB.velocity.magnitude * _direction > -_carPrefs.forceLimit / 10)
+        if (_speed < _carMechanics.gearLimits[_carMechanics.gear] && _speed * _direction > -_carPrefs.forceLimit / 10)
         {
             _rB.AddForce(Input_Manager.Instance.i_Vertical * gameObject.transform.forward * force * _carMechanics.gearForce, ForceMode.Acceleration);
         }
 
-        Debug.Log(force + " " + " direction is " + _direction);
     }
     private void Brake()
     {
@@ -92,15 +104,16 @@ public class Car_Controller : MonoBehaviour
     }
     private void SetDirection()
     {
-        _direction = 0;
-        if ((transform.forward - _rB.velocity).magnitude < (-transform.forward - _rB.velocity).magnitude)
-        {
-            _direction = 1;
-        }
-        if ((transform.forward - _rB.velocity).magnitude > (-transform.forward - _rB.velocity).magnitude)
+        if ((_rB.velocity - transform.forward).magnitude > (_rB.velocity + transform.forward).magnitude)
         {
             _direction = -1;
         }
+        else
+        {
+            _direction = 1;
+        }
+
+        Debug.Log(_direction + " ");
     }
 
     

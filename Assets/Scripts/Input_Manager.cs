@@ -5,6 +5,12 @@ using UnityEngine;
 public class Input_Manager : MonoBehaviour
 {
 
+    private float _inputV;
+    private float _inputH;
+
+    public float i_Vertical => _inputV;
+    public float i_Horizontal => _inputH;
+
     #region Singleton
     private static Input_Manager instance = null;
     public static Input_Manager Instance
@@ -18,13 +24,18 @@ public class Input_Manager : MonoBehaviour
             return instance;
         }
     }
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
     #endregion
-
-    private float _inputV;
-    private float _inputH;
-
-    public float i_Vertical => _inputV;
-    public float i_Horizontal => _inputH;
     private void Update()
     {
         _inputV = Input.GetAxis("Vertical");

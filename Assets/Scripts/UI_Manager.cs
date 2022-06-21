@@ -20,7 +20,26 @@ public class UI_Manager : MonoBehaviour
     }
     private void Update()
     {
-        _t_gear.text = _carMechanics.gear.ToString();
+        ShowGear();
+        ShowSpeed();
+    }
+    private void ShowGear()
+    {
+        if (_rb.velocity.magnitude == 0)
+        {
+            _t_gear.text = "0";
+        }
+        if (Car_Controller.Instance.direction < 0 && Input_Manager.Instance.i_Vertical < 0)
+        {
+            _t_gear.text = "R";
+        }
+        else
+        {
+            _t_gear.text = _carMechanics.gear.ToString();
+        }
+    }
+    private void ShowSpeed()
+    {
         _t_speed.text = ((int)(_rb.velocity.magnitude * 10)).ToString() + " " + "kmph";
     }
 }
