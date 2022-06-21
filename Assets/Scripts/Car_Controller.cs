@@ -21,19 +21,22 @@ public class Car_Controller : MonoBehaviour
 
     private Rigidbody _rB;
     [SerializeField] private Car_Preferences_SO _carPrefs = null;
+    private Car_Mechanics _carMechanics;
 
-    [SerializeField] private float _direction;
+    private float _direction;
     
 
     private void Start()
     {
         _rB = this.gameObject.GetComponent<Rigidbody>();
+        _carMechanics = this.gameObject.GetComponent<Car_Mechanics>();
     }
     private void Update()
     {
         SetDirection();
-        Accelarate();
+        Accelerate();
         Rotate();
+        Brake();
     }
 
     private void Rotate()
@@ -54,9 +57,38 @@ public class Car_Controller : MonoBehaviour
         
 
     }
-    private void Accelarate()
+    private void Accelerate()
     {
-        _rB.AddForce(Input_Manager.Instance.i_Vertical * gameObject.transform.forward * _carPrefs.force, ForceMode.Acceleration);
+        float force = _carPrefs.force;
+        if (_direction == -1)
+        {
+            force = _carPrefs.force * 0.6f;
+        }
+        if (_direction == 1 && Input_Manager.Instance.i_Vertical < 0)
+        {
+            force = 0;
+        }
+        else
+        {
+            force = _carPrefs.force;
+        }
+        if (_rB.velocity.magnitude < _carPrefs.forceLimit && _rB.velocity.magnitude * _direction > -_carPrefs.forceLimit / 10)
+        {
+            _rB.AddForce(Input_Manager.Instance.i_Vertical * gameObject.transform.forward * force * _carMechanics.gearForce, ForceMode.Acceleration);
+        }
+
+        Debug.Log(force + " " + " direction is " + _direction);
+    }
+    private void Brake()
+    {
+        if (Input_Manager.Instance.i_Vertical < 0)
+        {
+            if (_direction == 1)
+            {
+                _rB.AddForce(Input_Manager.Instance.i_Vertical * gameObject.transform.forward * 0.3f, ForceMode.Force);
+            }
+        }
+        
     }
     private void SetDirection()
     {

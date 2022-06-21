@@ -7,11 +7,9 @@ public class Car_Physics : MonoBehaviour
     private Rigidbody _rB;
     [SerializeField] private Car_Preferences_SO _carPrefs = null;
 
-    [SerializeField] private float _angle;
+    private float _angle;
 
-    [SerializeField] private Vector3 _currentVector;
-    [SerializeField] private Vector3 _previousVector;
-    [SerializeField] private Vector3 _centripitalForce;
+    private Vector3 _currentVector, _previousVector, _centripitalForce;
 
     private void Start()
     {
@@ -31,9 +29,8 @@ public class Car_Physics : MonoBehaviour
         _currentVector = transform.forward;
         _angle = Vector3.Angle(_previousVector, _currentVector);
 
-        _centripitalForce = transform.right * _angle * _rB.velocity.magnitude * _rB.velocity.magnitude * _carPrefs.cMultiplier;
+        _centripitalForce = transform.right * Mathf.Sqrt(_angle) * _rB.velocity.magnitude * _rB.velocity.magnitude * _carPrefs.cMultiplier;
 
         _rB.AddForce(-_centripitalForce * Input_Manager.Instance.i_Horizontal, ForceMode.Force);
-        Debug.Log(_centripitalForce.magnitude);
     }
 }
