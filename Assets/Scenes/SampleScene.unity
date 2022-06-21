@@ -1860,12 +1860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c2bb41fc770cf40ba538f1b25fbfc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gearLimits:
-  - 0
-  - 3
-  - 8
-  - 15
-  _gearForce: 0.5
+  _carPrefs: {fileID: 11400000, guid: 95e20e0dac51b214ba29a699b82a6f6d, type: 2}
 --- !u!1 &2122290968
 GameObject:
   m_ObjectHideFlags: 0

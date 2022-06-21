@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: Car_Type_01
   m_EditorClassIdentifier: 
   _force: 3
-  _rotationForce: 1.1
+  _rotationForce: 0.4
   _forceLimit: 15
   _centripitalForceMultiplier: 0.001
+  _gearLimits:
+  - 0
+  - 3
+  - 8
+  - 15

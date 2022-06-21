@@ -4,26 +4,44 @@ using UnityEngine;
 
 public class Car_Mechanics : MonoBehaviour
 {
-    private Rigidbody _rB;
+    [SerializeField] private Car_Preferences_SO _carPrefs = null;
 
-
-    [SerializeField] private bool _canAcc = true;
+    private bool _canAcc = true;
 
     private int _gear;
-    
-    [SerializeField] private float[] _gearLimits;
-    [SerializeField] private float _gearForce;
-    private const float _gearMultiplier = 1.1f;
-    private float _speed;
 
-    public float gearForce => _gearForce;
-    public float[] gearLimits => _gearLimits;
+    private float _gearForce;
+
     public int gear => _gear;
 
-    private void Start()
+    public float gearForce => _gearForce;
+
+    #region Singleton
+    private static Car_Mechanics instance = null;
+    public static Car_Mechanics Instance
     {
-        _rB = this.gameObject.GetComponent<Rigidbody>();
+        get
+        {
+            if (instance == null)
+            {
+                instance = new GameObject("SingletonCM").AddComponent<Car_Mechanics>();
+            }
+            return instance;
+        }
     }
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+    #endregion
+
 
     private void Update()
     {
@@ -31,12 +49,11 @@ public class Car_Mechanics : MonoBehaviour
     }
     private void ManageGears()
     {
-        _speed = _rB.velocity.magnitude;
-        for (int i = 0; i < _gearLimits.Length -1; i++)
+        for (int i = 0; i < _carPrefs.a_gearLimits.Length -1; i++)
         {
-            if (_speed > _gearLimits[i] && _speed <= _gearLimits[i + 1] && _canAcc)
+            if (Car_Physics.Instance.speed > _carPrefs.a_gearLimits[i] && Car_Physics.Instance.speed <= _carPrefs.a_gearLimits[i + 1] && _canAcc)
             {
-                _gearForce = Mathf.Pow(_gearMultiplier, i+1);
+                _gearForce = Mathf.Pow(_carPrefs.m_gear, i+1);
                 StartCoroutine(GearUpAndDown(i + 1));
             }
         }
