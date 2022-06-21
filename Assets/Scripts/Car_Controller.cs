@@ -7,6 +7,8 @@ public class Car_Controller : MonoBehaviour
     private Rigidbody _rB;
     [SerializeField] private Car_Preferences_SO _carPrefs = null;
 
+    [SerializeField] private float _localForce;
+
     #region Singleton
     private static Car_Controller instance = null;
     public static Car_Controller Instance
@@ -20,8 +22,6 @@ public class Car_Controller : MonoBehaviour
             return instance;
         }
     }
-   
-
 
     private void Awake()
     {
@@ -35,6 +35,7 @@ public class Car_Controller : MonoBehaviour
         }
     }
     #endregion
+
     private void Start()
     {
         _rB = this.gameObject.GetComponent<Rigidbody>();
@@ -48,31 +49,29 @@ public class Car_Controller : MonoBehaviour
 
     private void Rotate()
     {
-        float multiplier;
         if (Car_Physics.Instance.direction == 1)
         {
-            if (Car_Physics.Instance.speed < 1 && Car_Physics.Instance.speed > 0.2f)
+            switch (Car_Mechanics.Instance.gear)
             {
-                multiplier = Mathf.Pow(Car_Physics.Instance.speed + 0.5f, 0.01f);
-            }
-            if (Car_Physics.Instance.speed >= 1)
-            {
-                multiplier = 1 / Mathf.Pow(Car_Physics.Instance.speed, 0.7f);
-            }
-            else
-            {
-                multiplier = 0;
+                case 1:
+                    _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.9f);
+                    break;
+                case 2:
+                    _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.6f);
+                    break;
+                case 3:
+                    _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.3f);
+                    break;
+                default:
+                    _localForce = 0.5f;
+                    break;
             }
         }
         if (Car_Physics.Instance.direction == 0)
         {
-            multiplier = 0;
+            _localForce = 0;
         }
-        else
-        {
-            multiplier = Mathf.Pow(Car_Physics.Instance.speed*0.1f, 0.001f);
-        }
-        transform.Rotate(Input_Manager.Instance.i_Horizontal * transform.up * _carPrefs.rotationForce * Car_Physics.Instance.direction * multiplier);
+        transform.Rotate(Input_Manager.Instance.i_Horizontal * transform.up * _carPrefs.rotationForce * Car_Physics.Instance.direction * _localForce);
     }
     private void Accelerate()
     {

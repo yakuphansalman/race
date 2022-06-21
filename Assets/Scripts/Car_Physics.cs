@@ -10,6 +10,7 @@ public class Car_Physics : MonoBehaviour
     private float _angle;
     private float _direction;
     private float _speed;
+    private float _dot;
 
     private Vector3 _currentVector, _previousVector, _centripitalForce;
 
@@ -68,9 +69,15 @@ public class Car_Physics : MonoBehaviour
     }
     private void SetDirection()
     {
-        if ((_rB.velocity - transform.forward).magnitude > (_rB.velocity + transform.forward).magnitude)
+        _dot = Vector3.Dot(transform.forward, _rB.velocity);
+
+        if (_dot < -0.5f)
         {
             _direction = -1;
+        }
+        if (_dot >= -0.5f && _dot <= 0.5f)
+        {
+            _direction = 0;
         }
         else
         {

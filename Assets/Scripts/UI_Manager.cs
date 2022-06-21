@@ -10,13 +10,12 @@ public class UI_Manager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(Car_Physics.Instance.direction + " " + "speed is " + Car_Physics.Instance.speed);
         ShowGear();
         ShowSpeed();
     }
     private void ShowGear()
     {
-        if (Car_Physics.Instance.speed == 0)
+        if (Car_Physics.Instance.direction == 0)
         {
             _t_gear.text = "0";
         }
@@ -24,7 +23,7 @@ public class UI_Manager : MonoBehaviour
         {
             _t_gear.text = "R";
         }
-        else
+        else if (Car_Physics.Instance.direction == 1)
         {
             _t_gear.text = Car_Mechanics.Instance.gear.ToString();
         }
