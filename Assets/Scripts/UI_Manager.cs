@@ -19,7 +19,7 @@ public class UI_Manager : MonoBehaviour
         {
             _t_gear.text = "0";
         }
-        if (Car_Physics.Instance.direction < 0 && Input_Manager.Instance.i_Vertical < 0)
+        if (Car_Physics.Instance.direction == -1 && Input_Manager.Instance.i_Vertical < 0)
         {
             _t_gear.text = "R";
         }

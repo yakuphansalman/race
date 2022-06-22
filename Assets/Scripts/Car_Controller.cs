@@ -7,7 +7,7 @@ public class Car_Controller : MonoBehaviour
     private Rigidbody _rB;
     [SerializeField] private Car_Preferences_SO _carPrefs = null;
 
-    [SerializeField] private float _localForce;
+    private float _localForce;
 
     #region Singleton
     private static Car_Controller instance = null;
@@ -70,6 +70,10 @@ public class Car_Controller : MonoBehaviour
         if (Car_Physics.Instance.direction == 0)
         {
             _localForce = 0;
+        }
+        if (Car_Physics.Instance.direction == -1)
+        {
+            _localForce = -Mathf.Pow(Car_Physics.Instance.speed, 0.6f);
         }
         transform.Rotate(Input_Manager.Instance.i_Horizontal * transform.up * _carPrefs.rotationForce * Car_Physics.Instance.direction * _localForce);
     }

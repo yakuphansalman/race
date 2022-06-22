@@ -79,9 +79,11 @@ public class Car_Physics : MonoBehaviour
         {
             _direction = 0;
         }
-        else
+        if (_dot > 0.5f)
         {
             _direction = 1;
         }
+
+        Debug.Log(direction + " " + _dot);
     }
 }
