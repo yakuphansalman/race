@@ -84,6 +84,5 @@ public class Car_Physics : MonoBehaviour
             _direction = 1;
         }
 
-        Debug.Log(direction + " " + _dot);
     }
 }

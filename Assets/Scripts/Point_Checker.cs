@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class Point_Checker : MonoBehaviour
 {
-    public void OnTriggerEnter(Collider other)
+    [SerializeField] private bool _isTriggered;
+
+    public bool isTriggered => _isTriggered;
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.tag == "Car")
+        {
+            _isTriggered = true;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Car")
+        {
+            _isTriggered = false;
+        }
     }
 }

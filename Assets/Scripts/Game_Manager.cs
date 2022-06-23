@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Game_Manager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _points;
     [SerializeField] private GameObject[] _cars;
-    [SerializeField] private Point_Checker[] _checkers;
+    [SerializeField] private GameObject[] _points;
 
+    [SerializeField] private Point_Checker[] _pointChecker;
+
+    [SerializeField] private int[] _pointNumbers;
+
+    [SerializeField] private float[] _sectorTimes;
+    [SerializeField] private float [] _lapTimes;
 
 
     #region Singleton
@@ -40,20 +45,62 @@ public class Game_Manager : MonoBehaviour
 
     private void Start()
     {
-        _cars = GameObject.FindGameObjectsWithTag("Car");
-        _points = GameObject.FindGameObjectsWithTag("Point");
-        for (int i = 0; i < _points.Length; i++)
-        {
-            _checkers[i] = _points[i].GetComponent<Point_Checker>();
-        }
+        LapTime("Start");
     }
     private void Update()
     {
-        for (int i = 0; i < _cars.Length; i++)
+        LapTime("Update");
+    }
+
+
+    private void LapTime(string method)
+    {
+        if (method == "Start")
         {
-            for (int j = 0; j < _points.Length; j++)
+            _cars = GameObject.FindGameObjectsWithTag("Car");
+            _points = GameObject.FindGameObjectsWithTag("Point");
+
+            _pointChecker = new Point_Checker[_points.Length];
+            _pointNumbers = new int[_points.Length];
+            _sectorTimes = new float[_points.Length - 1];
+            _lapTimes = new float[_cars.Length];
+
+            for (int k = 1; k < _points.Length + 1; k++)
             {
+                _pointChecker[k - 1] = _points[k - 1].GetComponent<Point_Checker>();
+                if (_points[k - 1].name == "Point_" + k)
+                {
+                    _pointNumbers[k - 1] = k;
+                }
+            }
+        }
+
+        if (method == "Update")
+        {
+            for (int i = 0; i < _cars.Length; i++)
+            {
+                for (int j = 0; j < _points.Length; j++)
+                {
+                    if (_pointChecker[j].isTriggered)
+                    {
+                        switch (j)
+                        {
+                            case 0:
+
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
         }
     }
+
 }
