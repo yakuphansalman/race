@@ -9,10 +9,19 @@ public class Game_Manager : MonoBehaviour
 
     [SerializeField] private Point_Checker[] _pointChecker;
 
+    [SerializeField] private bool _onLap;
+    [SerializeField] private bool _onSector;
+
     [SerializeField] private int[] _pointNumbers;
+    [SerializeField] private int _currentPoint;
+    [SerializeField] private int _nextPoint;
+    [SerializeField] private int _lapSize;
+    
 
     [SerializeField] private float[] _sectorTimes;
-    [SerializeField] private float [] _lapTimes;
+    [SerializeField] private float[] _lapTimes;
+    [SerializeField] private float _totalSectorTime;
+
 
 
     #region Singleton
@@ -63,14 +72,15 @@ public class Game_Manager : MonoBehaviour
             _pointChecker = new Point_Checker[_points.Length];
             _pointNumbers = new int[_points.Length];
             _sectorTimes = new float[_points.Length - 1];
-            _lapTimes = new float[_cars.Length];
+            _lapTimes = new float[_lapSize + 1];
+            _sectorTimes = new float[(_lapSize + 1) * (_points.Length - 1)];
 
-            for (int k = 1; k < _points.Length + 1; k++)
+            for (int k = 0; k < _points.Length; k++)
             {
-                _pointChecker[k - 1] = _points[k - 1].GetComponent<Point_Checker>();
-                if (_points[k - 1].name == "Point_" + k)
+                _pointChecker[k] = _points[k].GetComponent<Point_Checker>();
+                if (_points[k].name == "Point_" + k)
                 {
-                    _pointNumbers[k - 1] = k;
+                    _pointNumbers[k] = k;
                 }
             }
         }
@@ -83,19 +93,40 @@ public class Game_Manager : MonoBehaviour
                 {
                     if (_pointChecker[j].isTriggered)
                     {
-                        switch (j)
-                        {
-                            case 0:
+                        _currentPoint = _pointNumbers[j];
 
-                                break;
-                            case 1:
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                break;
-                            default:
-                                break;
+                        if (_pointNumbers[j] == _points.Length - 1)
+                        {
+                            _nextPoint = 0;
+                        }
+                        else
+                        {
+                            _nextPoint = j + 1;
+                        }
+
+                        if (j == 0)
+                        {
+                            _onLap = true;
+                            _onSector = true;
+                        }
+                        else if (j == _points.Length)
+                        {
+                            _onLap = false;
+                            _onSector = false;
+                        }
+                    }
+                    for (int k = 0; k < _lapSize + 1; k++)
+                    {
+                        if (_currentPoint == k && k != 3)
+                        {
+                            if (_onSector)
+                            {
+                                _sectorTimes[k + 1] = Time.time + _sectorTimes[k - 1];
+                            }
+                            if (!_onSector)
+                            {
+                                _sectorTimes[k] = Time.time;
+                            }
                         }
                     }
                 }
