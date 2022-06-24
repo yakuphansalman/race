@@ -73,7 +73,7 @@ public class Car_Controller : MonoBehaviour
         }
         if (Car_Physics.Instance.direction == -1)
         {
-            _localForce = -Mathf.Pow(Car_Physics.Instance.speed, 0.6f);
+            _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.6f);
         }
         transform.Rotate(Input_Manager.Instance.i_Horizontal * transform.up * _carPrefs.rotationForce * Car_Physics.Instance.direction * _localForce);
     }
