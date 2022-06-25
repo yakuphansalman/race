@@ -5,13 +5,14 @@ using UnityEngine.UI;
 
 public class UI_Manager : MonoBehaviour
 {
-    [SerializeField] private Text _t_gear;
-    [SerializeField] private Text _t_speed;
+    [SerializeField] private Text _t_gear, _t_speed, _t_lapTime,_t_laps;
 
     private void Update()
     {
         ShowGear();
         ShowSpeed();
+        ShowLaps();
+        ShowLapTimes();
     }
     private void ShowGear()
     {
@@ -31,5 +32,20 @@ public class UI_Manager : MonoBehaviour
     private void ShowSpeed()
     {
         _t_speed.text = ((int)(Car_Physics.Instance.speed * 10)).ToString() + " " + "kmph";
+    }
+    private void ShowLaps()
+    {
+        if (Game_Manager.Instance.currentLap < 0)
+        {
+            _t_laps.text = 0 + " / " + Game_Manager.Instance.lapSize.ToString();
+        }
+        else
+        {
+            _t_laps.text = Game_Manager.Instance.currentLap.ToString() + " / " + Game_Manager.Instance.lapSize.ToString();
+        }
+    }
+    private void ShowLapTimes()
+    {
+        _t_lapTime.text = Game_Manager.Instance.currentLapTime.ToString();
     }
 }

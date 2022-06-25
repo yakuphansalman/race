@@ -6,17 +6,21 @@ public class Game_Manager : MonoBehaviour
 {
     [Header("Points")]
 
-    [SerializeField] private GameObject _pointStart, _pointFinish;
+    [SerializeField] private GameObject _pointZero;
     [SerializeField] private GameObject[] _points;
     [SerializeField] private Point_Checker[] _pointChecker;
 
     [Header("Info")]
 
-    private bool _isStarted, _isFinished,_isLapped;
+    private bool _isStarted, _isFinished;
     [SerializeField] private int _lapSize;
-    private int _timesLapped = 0;
-    private float _timer, _realizedTime;
+    private int _currentLap = -1;
+    private float _currentLapTime;
     [SerializeField] private float[] _lapTimes;
+
+    public float currentLapTime => _currentLapTime;
+    public int currentLap => _currentLap;
+    public int lapSize => _lapSize;
 
     #region Singleton
     private static Game_Manager instance = null;
@@ -65,35 +69,32 @@ public class Game_Manager : MonoBehaviour
 
         if (method == "Update")
         {
-            for (int i = 0; i < _points.Length; i++)
+            if (_pointChecker[0].timesTriggered > 0)
             {
-                if (_pointChecker[i].isTriggered && _points[i] == _pointFinish && _timesLapped != _lapSize && _isStarted)
+                _isStarted = true;
+                _isFinished = false;
+                if (_currentLap != _lapSize && _isStarted)
                 {
-                    _lapTimes[_timesLapped] = _timer;
-                    _timesLapped++;
-                    _timer = 0;
+                    _lapTimes[_currentLap] = _currentLapTime;
+                    _currentLap = _pointChecker[0].timesTriggered;
+                    _currentLapTime = 0;
                 }
-                if (_pointChecker[i].isTriggered && _points[i] == _pointStart)
-                { 
-                    _isStarted = true;
-                    _isFinished = false;
-                }
-                if (_pointChecker[i].isTriggered && _points[i] == _pointFinish && _timesLapped == _lapSize && !_isFinished)
+                else if (_currentLap == _lapSize && !_isFinished)
                 {
                     _isStarted = false;
                     _isFinished = true;
                 }
+
             }
             if (_isStarted)
             {
-                _timer += Time.deltaTime;
-                
+                _currentLapTime += Time.deltaTime;
             }
             if (_isFinished)
             {
-                _timer = 0;
+                _currentLapTime = 0;
             }
-            Debug.Log(_timer + " " + _timesLapped);
+            Debug.Log(_currentLapTime);
         }
     }
 
