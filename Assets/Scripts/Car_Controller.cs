@@ -57,13 +57,13 @@ public class Car_Controller : MonoBehaviour
                     _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.9f);
                     break;
                 case 2:
-                    _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.6f);
+                    _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.4f);
                     break;
                 case 3:
-                    _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.3f);
+                    _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.1f);
                     break;
                 default:
-                    _localForce = 0.5f;
+                    _localForce = 0.01f;
                     break;
             }
         }

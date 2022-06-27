@@ -9,15 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f63547b201354b47ab563415458440b, type: 3}
-  m_Name: Car_Type_01
+  m_Script: {fileID: 11500000, guid: 15a79a2a13af7194489b75f1bee60507, type: 3}
+  m_Name: Lap_Settings_01
   m_EditorClassIdentifier: 
-  _force: 3.5
-  _rotationForce: 0.025
-  _forceLimit: 15
-  _centripitalForceMultiplier: 0.001
-  _gearLimits:
-  - 0
-  - 4
-  - 10
-  - 15

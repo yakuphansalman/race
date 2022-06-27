@@ -35,17 +35,18 @@ public class UI_Manager : MonoBehaviour
     }
     private void ShowLaps()
     {
-        if (Game_Manager.Instance.currentLap < 0)
+        if (Lap_Manager.Instance.currentLap < 0)
         {
-            _t_laps.text = 0 + " / " + Game_Manager.Instance.lapSize.ToString();
+            _t_laps.text = 0 + " / " + Lap_Manager.Instance.lapSize.ToString();
         }
         else
         {
-            _t_laps.text = Game_Manager.Instance.currentLap.ToString() + " / " + Game_Manager.Instance.lapSize.ToString();
+            _t_laps.text = Lap_Manager.Instance.currentLap.ToString() + " / " + Lap_Manager.Instance.lapSize.ToString();
         }
     }
     private void ShowLapTimes()
     {
-        _t_lapTime.text = Game_Manager.Instance.currentLapTime.ToString();
+        float currentLapTime = Lap_Manager.Instance.currentLapTime;
+        _t_lapTime.text = Mathf.Floor(currentLapTime / 60).ToString() + " : " + Mathf.Floor(currentLapTime % 60).ToString() + " : " + Mathf.Floor(currentLapTime * 10 % 10).ToString();
     }
 }
