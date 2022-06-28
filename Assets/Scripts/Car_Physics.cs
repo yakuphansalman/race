@@ -8,14 +8,17 @@ public class Car_Physics : MonoBehaviour
     [SerializeField] private Car_Preferences_SO _carPrefs = null;
 
     private float _angle;
-    private float _direction;
+    private float _directionX , _directionY;
     private float _speed;
-    private float _dot;
+    private float _dotX, _dotY;
+    private Vector3 _rotationLast, _rotationDelta;
 
     private Vector3 _currentVector, _previousVector, _centripitalForce;
 
-    public float direction => _direction;
+    public float directionX => _directionX;
+    public float directionY => _directionY;
     public float speed => _speed;
+    public float dotY => _dotY;
 
     #region Singleton
     private static Car_Physics instance = null;
@@ -69,20 +72,31 @@ public class Car_Physics : MonoBehaviour
     }
     private void SetDirection()
     {
-        _dot = Vector3.Dot(transform.forward, _rB.velocity);
+        _dotX = Vector3.Dot(transform.forward, _rB.velocity);
 
-        if (_dot < -0.5f)
+        if (_dotX < -0.5f)
         {
-            _direction = -1;
+            _directionX = -1;
         }
-        if (_dot >= -0.5f && _dot <= 0.5f)
+        if (_dotX >= -0.5f && _dotX <= 0.5f)
         {
-            _direction = 0;
+            _directionX = 0;
         }
-        if (_dot > 0.5f)
+        if (_dotX > 0.5f)
         {
-            _direction = 1;
+            _directionX = 1;
         }
 
+        _rotationDelta = transform.localRotation.eulerAngles - _rotationLast;
+        _rotationLast = transform.localRotation.eulerAngles;
+        _directionY = angularSpeed.normalized.y;
+
+    }
+    public Vector3 angularSpeed
+    {
+        get
+        {
+            return _rotationDelta;
+        }
     }
 }

@@ -42,8 +42,6 @@ public class Car_Mechanics : MonoBehaviour
         }
     }
     #endregion
-
-
     private void Update()
     {
         ManageGears();

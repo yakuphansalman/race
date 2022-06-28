@@ -46,7 +46,6 @@ public class Lap_Checker : Lap_Manager
             if (_isRunning)
             {
                 _sectorTimer += Time.deltaTime;
-                Debug.Log(_sectorTimer + " " + _currentLap);
                 for (int i = 0; i < _sectorSize; i++)
                 {
                     if (i == _currentSector)
@@ -63,7 +62,6 @@ public class Lap_Checker : Lap_Manager
                     }
                 }
             }
-            Debug.Log("Current Sector is " + _currentSector % _pointSize + " Current Lap is " + _currentLap + " Current Sector time is " + _sectorTimer + " Current Lap time is " + _currentLapTime);
         }
     }
 }

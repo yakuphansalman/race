@@ -6,6 +6,7 @@ public class Car_Controller : MonoBehaviour
 {
     private Rigidbody _rB;
     [SerializeField] private Car_Preferences_SO _carPrefs = null;
+    [SerializeField] private WheelCollider[] _wheels;
 
     private float _localForce;
 
@@ -49,7 +50,7 @@ public class Car_Controller : MonoBehaviour
 
     private void Rotate()
     {
-        if (Car_Physics.Instance.direction == 1)
+        if (Car_Physics.Instance.directionX == 1)
         {
             switch (Car_Mechanics.Instance.gear)
             {
@@ -67,24 +68,24 @@ public class Car_Controller : MonoBehaviour
                     break;
             }
         }
-        if (Car_Physics.Instance.direction == 0)
+        if (Car_Physics.Instance.directionX == 0)
         {
             _localForce = 0;
         }
-        if (Car_Physics.Instance.direction == -1)
+        if (Car_Physics.Instance.directionX == -1)
         {
             _localForce = Mathf.Pow(Car_Physics.Instance.speed, 0.6f);
         }
-        transform.Rotate(Input_Manager.Instance.i_Horizontal * transform.up * _carPrefs.rotationForce * Car_Physics.Instance.direction * _localForce);
+        transform.Rotate(Input_Manager.Instance.i_Horizontal * transform.up * _carPrefs.rotationForce * Car_Physics.Instance.directionX * _localForce);
     }
     private void Accelerate()
     {
         float force = _carPrefs.force;
-        if (Car_Physics.Instance.direction == -1)
+        if (Car_Physics.Instance.directionX == -1)
         {
             force = _carPrefs.force * 0.6f;
         }
-        if (Car_Physics.Instance.direction == 1 && Input_Manager.Instance.i_Vertical < 0)
+        if (Car_Physics.Instance.directionX == 1 && Input_Manager.Instance.i_Vertical < 0)
         {
             force = 0;
         }
@@ -92,9 +93,17 @@ public class Car_Controller : MonoBehaviour
         {
             force = _carPrefs.force;
         }
-        if (Car_Physics.Instance.speed < _carPrefs.a_gearLimits[Car_Mechanics.Instance.gear] && Car_Physics.Instance.speed * Car_Physics.Instance.direction > -_carPrefs.forceLimit / 10)
+        if (Car_Physics.Instance.speed < _carPrefs.a_gearLimits[Car_Mechanics.Instance.gear] && Car_Physics.Instance.speed * Car_Physics.Instance.directionX > -_carPrefs.forceLimit / 10)
         {
-            _rB.AddForce(Input_Manager.Instance.i_Vertical * gameObject.transform.forward * force * Car_Mechanics.Instance.gearForce, ForceMode.Acceleration);
+            //_rB.AddForce(Input_Manager.Instance.i_Vertical * gameObject.transform.forward * force * Car_Mechanics.Instance.gearForce, ForceMode.Acceleration);
+            foreach (var wheel in _wheels)
+            {
+                wheel.motorTorque = force * Input_Manager.Instance.i_Vertical;
+                if (wheel == _wheels[0] || wheel == _wheels[1])
+                {
+                    wheel.steerAngle = _carPrefs.rotationForce * Input_Manager.Instance.i_Horizontal;
+                }
+            }
         }
 
     }
@@ -102,7 +111,7 @@ public class Car_Controller : MonoBehaviour
     {
         if (Input_Manager.Instance.i_Vertical < 0)
         {
-            if (Car_Physics.Instance.direction == 1)
+            if (Car_Physics.Instance.directionX == 1)
             {
                 _rB.AddForce(Input_Manager.Instance.i_Vertical * gameObject.transform.forward * 0.3f, ForceMode.Force);
             }
