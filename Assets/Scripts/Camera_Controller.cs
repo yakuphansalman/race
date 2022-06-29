@@ -28,7 +28,7 @@ public class Camera_Controller : MonoBehaviour
     }
     private void Zoom()
     {
-        if (Car_Physics.Instance.directionX > 0)
+        if (Car_Physics.Instance.direction > 0)
         {
             float posZ = Mathf.Lerp(_offset.z, _offset.z - 0.5f, Car_Physics.Instance.speed / 15);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, posZ);
@@ -37,7 +37,7 @@ public class Camera_Controller : MonoBehaviour
     private void LerpTurns()
     {
         float posX;
-        posX = Mathf.Lerp(_offset.x, _offset.x - 1.5f * Car_Physics.Instance.directionY, Car_Physics.Instance.angularSpeed.magnitude * 1.5f);
+        posX = Mathf.Lerp(_offset.x, _offset.x - 1.5f * Car_Physics.Instance.direction_r, Car_Physics.Instance.angularSpeed.magnitude * 1.5f);
         transform.localPosition = new Vector3(posX, transform.localPosition.y, transform.localPosition.z);
     }
 }

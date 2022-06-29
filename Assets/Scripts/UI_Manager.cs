@@ -16,15 +16,15 @@ public class UI_Manager : MonoBehaviour
     }
     private void ShowGear()
     {
-        if (Car_Physics.Instance.directionX == 0)
+        if (Car_Physics.Instance.direction == 0)
         {
             _t_gear.text = "0";
         }
-        if (Car_Physics.Instance.directionX == -1 && Input_Manager.Instance.i_Vertical < 0)
+        if (Car_Physics.Instance.direction == -1 && Input_Manager.Instance.i_Vertical < 0)
         {
             _t_gear.text = "R";
         }
-        else if (Car_Physics.Instance.directionX == 1)
+        else if (Car_Physics.Instance.direction == 1)
         {
             _t_gear.text = Car_Mechanics.Instance.gear.ToString();
         }
