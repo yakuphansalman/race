@@ -12,9 +12,9 @@ public class Car_Mechanics : MonoBehaviour
 
     private float _gearForce;
 
-    public int gear => _gear;
+    public int Gear => _gear;
 
-    public float gearForce => _gearForce;
+    public float GearForce => _gearForce;
 
 
     #region Singleton
@@ -48,11 +48,11 @@ public class Car_Mechanics : MonoBehaviour
     }
     private void ManageGears()
     {
-        for (int i = 0; i < _carPrefs.a_gearLimits.Length -1; i++)
+        for (int i = 0; i < _carPrefs.GearLimits.Length -1; i++)
         {
-            if (Car_Physics.Instance.speed > _carPrefs.a_gearLimits[i] && Car_Physics.Instance.speed <= _carPrefs.a_gearLimits[i + 1] && _canAcc)
+            if (Car_Physics.Instance.Speed > _carPrefs.GearLimits[i] && Car_Physics.Instance.Speed <= _carPrefs.GearLimits[i + 1] && _canAcc)
             {
-                _gearForce = Mathf.Pow(_carPrefs.m_gear, i+1);
+                _gearForce = Mathf.Pow(_carPrefs.M_Gear, i+1);
                 StartCoroutine(GearUpAndDown(i + 1));
             }
         }

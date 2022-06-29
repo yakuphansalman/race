@@ -13,10 +13,10 @@ public class Car_Preferences_SO : ScriptableObject
     [SerializeField] private float _forceLimit;
 
 
-    public float force => _force;
-    public float brakeForce => _brakeForce;
-    public float rotationForce => _rotationForce;
-    public float forceLimit => _forceLimit;
+    public float Force => _force;
+    public float BrakeForce => _brakeForce;
+    public float RotationForce => _rotationForce;
+    public float ForceLimit => _forceLimit;
     #endregion
 
     #region Physics
@@ -24,8 +24,8 @@ public class Car_Preferences_SO : ScriptableObject
     [SerializeField] private float _centripitalForceMultiplier;
     [SerializeField] private float _friction;
 
-    public float cMultiplier => _centripitalForceMultiplier;
-    public float friction => _friction;
+    public float M_Centripital => _centripitalForceMultiplier;
+    public float Friction => _friction;
 
     #endregion
 
@@ -33,8 +33,8 @@ public class Car_Preferences_SO : ScriptableObject
     [SerializeField] private float[] _gearLimits;
     private const float _gearMultiplier = 1.1f;
 
-    public float[] a_gearLimits => _gearLimits;
-    public float m_gear => _gearMultiplier;
+    public float[] GearLimits => _gearLimits;
+    public float M_Gear => _gearMultiplier;
     #endregion
 
 }

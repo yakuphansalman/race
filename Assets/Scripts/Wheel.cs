@@ -11,6 +11,6 @@ public class Wheel : MonoBehaviour
     private void Rotate()
     {
         Vector3 rotateDirection = new Vector3(0, transform.localPosition.y, 0);
-        transform.Rotate(Car_Physics.Instance.speed * rotateDirection * Car_Physics.Instance.direction);
+        transform.Rotate(Car_Physics.Instance.Speed * rotateDirection * Car_Physics.Instance.Direction);
     }
 }

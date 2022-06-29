@@ -20,10 +20,10 @@ public class Lap_Manager : MonoBehaviour
     private static protected float[] _sectorTimes;
     private static protected float[] _lapTimes;
 
-    public float currentLapTime => _currentLapTime;
-    public int currentLap => _currentLap;
-    public int lapSize => _lapSize;
-    public GameObject pointZero => _pointZero;
+    public float CurrentLapTime => _currentLapTime;
+    public int CurrentLap => _currentLap;
+    public int LapSize => _lapSize;
+    public GameObject PointZero => _pointZero;
 
     #region Singleton
     private static Lap_Manager instance = null;

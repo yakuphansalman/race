@@ -17,10 +17,10 @@ public class Car_Physics : MonoBehaviour
 
     private Vector3 _currentVector, _previousVector, _centripitalForce;
 
-    public float direction => _direction;
-    public float direction_r => _rotationDirection;
-    public float speed => _speed;
-    public float dotY => _dotY;
+    public float Direction => _direction;
+    public float Direction_R => _rotationDirection;
+    public float Speed => _speed;
+    public float DotY => _dotY;
 
     #region Singleton
     private static Car_Physics instance = null;
@@ -64,7 +64,7 @@ public class Car_Physics : MonoBehaviour
     }
     private void CentripitalForce()
     {
-        if (Input_Manager.Instance.i_Horizontal == 0)
+        if (Input_Manager.Instance.I_Horizontal == 0)
         {
             _angle = 0;
         }
@@ -72,9 +72,9 @@ public class Car_Physics : MonoBehaviour
         _currentVector = transform.forward;
         _angle = Vector3.Angle(_previousVector, _currentVector);
 
-        _centripitalForce = transform.right * Mathf.Sqrt(_angle) * _rB.velocity.magnitude * _rB.velocity.magnitude * _carPrefs.cMultiplier;
+        _centripitalForce = transform.right * Mathf.Sqrt(_angle) * _rB.velocity.magnitude * _rB.velocity.magnitude * _carPrefs.M_Centripital;
 
-        _rB.AddForce(-_centripitalForce * Input_Manager.Instance.i_Horizontal, ForceMode.Force);
+        _rB.AddForce(-_centripitalForce * Input_Manager.Instance.I_Horizontal, ForceMode.Force);
     }
     private void SetDirection()
     {
@@ -95,10 +95,10 @@ public class Car_Physics : MonoBehaviour
 
         _rotationDelta = transform.localRotation.eulerAngles - _rotationLast;
         _rotationLast = transform.localRotation.eulerAngles;
-        _rotationDirection = angularSpeed.normalized.y;
+        _rotationDirection = AngularSpeed.normalized.y;
 
     }
-    public Vector3 angularSpeed
+    public Vector3 AngularSpeed
     {
         get
         {

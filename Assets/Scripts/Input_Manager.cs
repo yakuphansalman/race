@@ -8,8 +8,8 @@ public class Input_Manager : MonoBehaviour
     private float _inputV;
     private float _inputH;
 
-    public float i_Vertical => _inputV;
-    public float i_Horizontal => _inputH;
+    public float I_Vertical => _inputV;
+    public float I_Horizontal => _inputH;
 
     #region Singleton
     private static Input_Manager instance = null;

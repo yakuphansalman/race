@@ -17,12 +17,12 @@ public class Lap_Checker : Lap_Manager
     {
         if (other.gameObject.tag == "Car")
         {
-            if (this.gameObject == pointZero)
+            if (this.gameObject == PointZero)
             {
                 _isRunning = true;
                 _currentLap++;
             }
-            if (_currentLap == lapSize)
+            if (_currentLap == LapSize)
             {
                 _isRunning = false;
             }
@@ -36,9 +36,9 @@ public class Lap_Checker : Lap_Manager
         if (method == "Start")
         {
             _pointSize = GameObject.FindGameObjectsWithTag("Point").Length;
-            _sectorSize = lapSize * _pointSize;
+            _sectorSize = LapSize * _pointSize;
             _sectorTimes = new float[_sectorSize];
-            _lapTimes = new float[lapSize];
+            _lapTimes = new float[LapSize];
             _pointZero = GameObject.Find("Point_0");
         }
         if (method == "Update")
