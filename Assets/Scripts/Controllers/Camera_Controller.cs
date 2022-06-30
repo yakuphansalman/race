@@ -15,10 +15,10 @@ public class Camera_Controller : MonoBehaviour
     }
     private void Update()
     {
-        FollowTarget();
     }
     private void FixedUpdate()
     {
+        FollowTarget();
         Zoom();
         LerpTurns();
     }
@@ -30,14 +30,15 @@ public class Camera_Controller : MonoBehaviour
     {
         if (Car_Physics.Instance.Direction > 0)
         {
-            float posZ = Mathf.Lerp(_offset.z, _offset.z - 0.5f, Car_Physics.Instance.Speed / 15);
+            float posZ = Mathf.Lerp(_offset.z, _offset.z - 2f, Mathf.Floor(Car_Physics.Instance.Speed) / 15);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, posZ);
+            
         }
     }
     private void LerpTurns()
     {
         float posX;
-        posX = Mathf.Lerp(_offset.x, _offset.x - 1.5f * Car_Physics.Instance.Direction_R, Car_Physics.Instance.AngularSpeed.magnitude * 1.5f);
+        posX = Mathf.Lerp(_offset.x, _offset.x - 1.5f * Car_Physics.Instance.Direction_R, Car_Physics.Instance.RotationDelta.magnitude * 1.5f);
         transform.localPosition = new Vector3(posX, transform.localPosition.y, transform.localPosition.z);
     }
 }

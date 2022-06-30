@@ -19,6 +19,7 @@ public class Car_Physics : MonoBehaviour
 
     public float Direction => _direction;
     public float Direction_R => _rotationDirection;
+    public Vector3 RotationDelta => _rotationDelta;
     public float Speed => _speed;
     public float DotY => _dotY;
 
@@ -57,6 +58,7 @@ public class Car_Physics : MonoBehaviour
         _speed = _rB.velocity.magnitude;
         CentripitalForce();
         SetDirection();
+        LimitSpeed();
     }
     private void FixedUpdate()
     {
@@ -95,14 +97,23 @@ public class Car_Physics : MonoBehaviour
 
         _rotationDelta = transform.localRotation.eulerAngles - _rotationLast;
         _rotationLast = transform.localRotation.eulerAngles;
-        _rotationDirection = AngularSpeed.normalized.y;
-
     }
-    public Vector3 AngularSpeed
+    private void LimitSpeed()
+    {
+        if (_speed * _direction > _carPrefs.ForceLimit)
+        {
+            _speed = _carPrefs.ForceLimit;
+        }
+        if (_speed * _direction < -_carPrefs.ForceLimit / 10)
+        {
+            _speed = _carPrefs.ForceLimit / 10;
+        }
+    }
+    public float AngularSpeed
     {
         get
         {
-            return _rotationDelta;
+            return _rotationDelta.normalized.y;
         }
     }
 }

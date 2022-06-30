@@ -7,7 +7,7 @@ public class UI_Manager : MonoBehaviour
 {
     [SerializeField] private Text _t_gear, _t_speed, _t_lapTime,_t_laps;
 
-    private void Update()
+    private void FixedUpdate()
     {
         ShowGear();
         ShowSpeed();

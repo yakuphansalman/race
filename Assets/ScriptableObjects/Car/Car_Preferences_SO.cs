@@ -22,16 +22,14 @@ public class Car_Preferences_SO : ScriptableObject
     #region Physics
 
     [SerializeField] private float _centripitalForceMultiplier;
-    [SerializeField] private float _friction;
 
     public float M_Centripital => _centripitalForceMultiplier;
-    public float Friction => _friction;
 
     #endregion
 
     #region Mechanics
     [SerializeField] private float[] _gearLimits;
-    private const float _gearMultiplier = 1.1f;
+    private const float _gearMultiplier = 1.2f;
 
     public float[] GearLimits => _gearLimits;
     public float M_Gear => _gearMultiplier;
