@@ -63,6 +63,7 @@ public class Car_Physics : MonoBehaviour
     private void FixedUpdate()
     {
         _rB.centerOfMass = _centerOfMass.localPosition;
+        SetAngularDirection();
     }
     private void CentripitalForce()
     {
@@ -94,7 +95,9 @@ public class Car_Physics : MonoBehaviour
         {
             _direction = 1;
         }
-
+    }
+    private void SetAngularDirection()
+    {
         _rotationDelta = transform.localRotation.eulerAngles - _rotationLast;
         _rotationLast = transform.localRotation.eulerAngles;
     }

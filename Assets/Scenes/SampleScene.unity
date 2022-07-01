@@ -1117,7 +1117,7 @@ WheelCollider:
     m_ExtremumValue: 10000
     m_AsymptoteSlip: 2500
     m_AsymptoteValue: 5000
-    m_Stiffness: 5
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
@@ -1322,6 +1322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _aiPrefs: {fileID: 11400000, guid: 26b55c6ffbb6d5241b17bb09f56ffe95, type: 2}
   _activeScenario: 0
+  _TESTARRAY: []
 --- !u!1 &591952235
 GameObject:
   m_ObjectHideFlags: 0
@@ -2228,7 +2229,7 @@ WheelCollider:
     m_ExtremumValue: 10000
     m_AsymptoteSlip: 2500
     m_AsymptoteValue: 5000
-    m_Stiffness: 5
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 5000
     m_ExtremumValue: 10000
@@ -3151,7 +3152,7 @@ WheelCollider:
     m_ExtremumValue: 10000
     m_AsymptoteSlip: 2500
     m_AsymptoteValue: 5000
-    m_Stiffness: 5
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
@@ -4008,7 +4009,7 @@ WheelCollider:
     m_ExtremumValue: 10000
     m_AsymptoteSlip: 2500
     m_AsymptoteValue: 5000
-    m_Stiffness: 5
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1

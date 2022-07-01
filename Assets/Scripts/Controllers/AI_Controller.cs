@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AI_Controller : MonoBehaviour
 {
-    public AI_Preferences_SO _aiPrefs;
+    [SerializeField] private AI_Preferences_SO _aiPrefs;
 
     private int _rayCount = 5;
     [SerializeField] private int _activeScenario;
@@ -12,6 +12,7 @@ public class AI_Controller : MonoBehaviour
     private float _speed, _rotationSpeed;
     private float _horizontalMultiplier,_verticalMultiplier;
     private float[] _objectDeltaMagnitudes;
+    [SerializeField] private float[] _TESTARRAY;
 
     private Vector3[] _objectDeltas;
  
@@ -27,6 +28,11 @@ public class AI_Controller : MonoBehaviour
         _hits = new RaycastHit[_rayCount];
         _objectDeltas = new Vector3[_rayCount];
         _objectDeltaMagnitudes = new float[_rayCount];
+        _TESTARRAY = new float[3];
+        _TESTARRAY[0] = float.NaN;
+        _TESTARRAY[1] = 0;
+        _TESTARRAY[2] = 5;
+        Debug.Log(Mathf.Min(_TESTARRAY));
     }
 
     private void Update()
@@ -36,6 +42,7 @@ public class AI_Controller : MonoBehaviour
         CastRays();
 
         CheckObstacles();
+
     }
     private void Move()
     {
@@ -45,7 +52,7 @@ public class AI_Controller : MonoBehaviour
     {
         for (int i = 0; i < _rayCount; i++)
         {
-            Physics.Raycast(_rays[i], out _hits[i], 4f);
+            Physics.Raycast(_rays[i], out _hits[i], 10f);
         }
 
         #region Ray Directions
@@ -76,15 +83,15 @@ public class AI_Controller : MonoBehaviour
                 _verticalMultiplier = 1;
                 _horizontalMultiplier = -1;
             }
-            _rays[i] = new Ray(transform.position, (transform.forward * _verticalMultiplier + transform.right * _horizontalMultiplier).normalized * 15f);
+            _rays[i] = new Ray(transform.position, (transform.forward * _verticalMultiplier + transform.right * _horizontalMultiplier).normalized * 30f);
 
             if (i == _activeScenario)
             {
-                Debug.DrawRay(_rays[i].origin, _rays[i].direction * 15, new Color(255, 0, 0));
+                Debug.DrawRay(_rays[i].origin, _rays[i].direction * 30, new Color(255, 0, 0));
             }
             else
             {
-                Debug.DrawRay(_rays[i].origin, _rays[i].direction * 15, new Color(255, 255, 0));
+                Debug.DrawRay(_rays[i].origin, _rays[i].direction * 30, new Color(255, 255, 0));
             }
         }
         #endregion
@@ -99,7 +106,7 @@ public class AI_Controller : MonoBehaviour
         for (int i = 0; i < _rayCount; i++)
         {
             _objectDeltaMagnitudes[i] = _objectDeltas[i].magnitude;
-            if (_objectDeltaMagnitudes[i] == Mathf.Min(_objectDeltaMagnitudes))
+            if (_objectDeltaMagnitudes[i] == Mathf.Min(_objectDeltaMagnitudes) && _objectDeltaMagnitudes[i] != float.NaN)
             {
                 _activeScenario = i;
             }
@@ -107,7 +114,7 @@ public class AI_Controller : MonoBehaviour
             {
                 _activeScenario = Random.Range(0, 6);
             }
-            if (_hits[i].collider != null)
+            if (_hits[i].collider != null && _objectDeltas[i] != new Vector3(float.NaN,float.NaN,float.NaN))
             {
                 if (_hits[i].collider.gameObject.CompareTag("Boundary"))
                 {
