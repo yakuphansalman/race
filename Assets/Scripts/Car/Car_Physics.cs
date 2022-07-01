@@ -5,25 +5,22 @@ using UnityEngine;
 public class Car_Physics : MonoBehaviour
 {
     private Rigidbody _rB;
-    [SerializeField] private Car_Preferences_SO _carPrefs = null;
 
     [SerializeField] private Transform _centerOfMass;
 
     private float _angle;
-    private float _direction , _rotationDirection;
+    private float _direction;
     private float _speed;
-    private float _dotX, _dotY;
-    private Vector3 _rotationLast, _rotationDelta;
+    private float _dotX;
 
+    private Vector3 _rotationLast, _rotationDelta;
     private Vector3 _currentVector, _previousVector, _centripitalForce;
 
     public float Direction => _direction;
-    public float Direction_R => _rotationDirection;
-    public Vector3 RotationDelta => _rotationDelta;
     public float Speed => _speed;
-    public float DotY => _dotY;
 
     #region Singleton
+
     private static Car_Physics instance = null;
     public static Car_Physics Instance
     {
@@ -47,6 +44,7 @@ public class Car_Physics : MonoBehaviour
             instance = this;
         }
     }
+
     #endregion
 
     private void Start()
@@ -58,7 +56,6 @@ public class Car_Physics : MonoBehaviour
         _speed = _rB.velocity.magnitude;
         CentripitalForce();
         SetDirection();
-        LimitSpeed();
     }
     private void FixedUpdate()
     {
@@ -75,7 +72,7 @@ public class Car_Physics : MonoBehaviour
         _currentVector = transform.forward;
         _angle = Vector3.Angle(_previousVector, _currentVector);
 
-        _centripitalForce = transform.right * Mathf.Sqrt(_angle) * _rB.velocity.magnitude * _rB.velocity.magnitude * _carPrefs.M_Centripital;
+        _centripitalForce = transform.right * Mathf.Sqrt(_angle) * _rB.velocity.magnitude * _speed;
 
         _rB.AddForce(-_centripitalForce * Input_Manager.Instance.I_Horizontal, ForceMode.Force);
     }
@@ -100,17 +97,6 @@ public class Car_Physics : MonoBehaviour
     {
         _rotationDelta = transform.localRotation.eulerAngles - _rotationLast;
         _rotationLast = transform.localRotation.eulerAngles;
-    }
-    private void LimitSpeed()
-    {
-        if (_speed * _direction > _carPrefs.ForceLimit)
-        {
-            _speed = _carPrefs.ForceLimit;
-        }
-        if (_speed * _direction < -_carPrefs.ForceLimit / 10)
-        {
-            _speed = _carPrefs.ForceLimit / 10;
-        }
     }
     public float AngularSpeed
     {

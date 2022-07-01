@@ -7,23 +7,20 @@ public class Car_Preferences_SO : ScriptableObject
 {
 
     #region Controller
+
     [SerializeField] private float _force;
     [SerializeField] private float _brakeForce;
-    [SerializeField] private float _rotationForce;
+    [SerializeField] private float _angularForce;
     [SerializeField] private float _forceLimit;
 
 
     public float Force => _force;
     public float BrakeForce => _brakeForce;
-    public float RotationForce => _rotationForce;
+    public float AngularForce => _angularForce;
     public float ForceLimit => _forceLimit;
     #endregion
 
     #region Physics
-
-    [SerializeField] private float _centripitalForceMultiplier;
-
-    public float M_Centripital => _centripitalForceMultiplier;
 
     #endregion
 

@@ -51,7 +51,7 @@ public class Car_Controller : MonoBehaviour
         {
             if (wheel == _wheels[i])
             {
-                wheel.steerAngle = _carPrefs.RotationForce * Input_Manager.Instance.I_Horizontal / Mathf.Pow(Car_Mechanics.Instance.GearForce, Mathf.Sqrt(Car_Physics.Instance.Speed));
+                wheel.steerAngle = _carPrefs.AngularForce * Input_Manager.Instance.I_Horizontal / Mathf.Pow(Car_Mechanics.Instance.GearForce, Mathf.Sqrt(Car_Physics.Instance.Speed));
             }
         }
 

@@ -21,7 +21,6 @@ public class Camera_Controller : MonoBehaviour
     {
         FollowTarget();
         Zoom();
-        //LerpTurns();
     }
     private void FollowTarget()
     {
@@ -35,12 +34,5 @@ public class Camera_Controller : MonoBehaviour
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, posZ);
             
         }
-    }
-    private void LerpTurns()
-    {
-        float posX;
-        posX = Mathf.Lerp(_offset.x, _offset.x - 3 * Car_Physics.Instance.AngularSpeed, Car_Physics.Instance.RotationDelta.magnitude * 0.5f);
-        transform.localPosition = new Vector3(posX, transform.localPosition.y, transform.localPosition.z);
-        Debug.Log(Car_Physics.Instance.AngularSpeed + " " + posX);
     }
 }

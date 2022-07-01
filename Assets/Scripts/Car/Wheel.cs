@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Wheel : MonoBehaviour
 {
-    [SerializeField] private Transform[] _wheelPoses;
     private void FixedUpdate()
     {
         Rotate();
