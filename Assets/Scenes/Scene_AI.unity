@@ -531,7 +531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2535317790187675141, guid: 585accd45888389489db6a11467d80d8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -25
+      value: -15.24
       objectReference: {fileID: 0}
     - target: {fileID: 2535317790187675141, guid: 585accd45888389489db6a11467d80d8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -612,7 +612,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _aiPrefs: {fileID: 11400000, guid: 26b55c6ffbb6d5241b17bb09f56ffe95, type: 2}
-  _rayCount: 5
+  _rayCount: 6
+  _posDeltas: []
+  _posDeltaMagnitudes: []
 --- !u!1 &382400035
 GameObject:
   m_ObjectHideFlags: 0
