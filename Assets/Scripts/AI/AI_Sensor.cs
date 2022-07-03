@@ -16,9 +16,12 @@ namespace AI
         #endregion
 
         [SerializeField] private Vector3[] _posDeltas;
+
         [SerializeField] private float[] _posDeltaMags;
+        [SerializeField] private float _activeDelta;
 
         public float[] DeltaMags => _posDeltaMags;
+        public float ActiveDelta => _activeDelta;
         public int RayCount => _rayCount;
 
         private void Start()
@@ -69,6 +72,10 @@ namespace AI
                     {
                         _posDeltas[i] = _hits[i].collider.ClosestPoint(transform.position) - transform.position;
                         _posDeltaMags[i] = _posDeltas[i].magnitude;
+                        if (Mathf.Min(_posDeltaMags) == _posDeltaMags[i])
+                        {
+                            _activeDelta = _posDeltaMags[i];
+                        }
                     }
                 }
             }
