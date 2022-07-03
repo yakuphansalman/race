@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace AI
 {
-    public class AI_Controller : AI_Manager
+    public class AI_Controller : MonoBehaviour
     {
         [SerializeField] private WheelCollider[] _wheels;
+        [SerializeField] private AI_Preferences_SO _aiPrefs;
 
         #region Variables
 
@@ -18,30 +19,39 @@ namespace AI
 
         #endregion
 
-        private void FixedUpdate()
+        private void Update()
         {
-            foreach (var wheelColl in _wheels)
+            foreach (var wheelCollider in _wheels)
             {
-                Accelerate(wheelColl);
-                Steer(wheelColl);
-                Brake(wheelColl);
+                Accelerate(wheelCollider);
+                Steer(wheelCollider);
+                Brake(wheelCollider);
             }
         }
 
         private void Accelerate(WheelCollider wheel)
         {
-            wheel.motorTorque = _aiPrefs.Force * _commAcc;
+            if (AI_Manager.Instance.CommAcc != 0)
+            {
+                wheel.motorTorque = _aiPrefs.Force * AI_Manager.Instance.CommAcc;
+            }
         }
 
         private void Steer(WheelCollider wheel)
         {
-            wheel.steerAngle = _aiPrefs.AngularForce * _commSteer / Mathf.Pow(_commAcc, Mathf.Sqrt(AI_Physics.Instance.Speed));
+            for (int i = 0; i < 2; i++)
+            {
+                if (wheel == _wheels[i])
+                {
+                    wheel.steerAngle = _aiPrefs.AngularForce * AI_Manager.Instance.CommSteer;
+                }
+            }
         }
         private void Brake(WheelCollider wheel)
         {
-            if (AI_Physics.Instance.Direction > 0)
+            if (AI_Physics.Instance.Direction > 0 && AI_Manager.Instance.CommBrake != 0)
             {
-                wheel.motorTorque = -_aiPrefs.BrakeForce * _commBrake;
+                wheel.motorTorque = -_aiPrefs.BrakeForce * AI_Manager.Instance.CommBrake;
             }
         }
     }

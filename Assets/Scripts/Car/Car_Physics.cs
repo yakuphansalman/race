@@ -98,7 +98,7 @@ public class Car_Physics : MonoBehaviour
         _rotationDelta = transform.localRotation.eulerAngles - _rotationLast;
         _rotationLast = transform.localRotation.eulerAngles;
     }
-    public float AngularSpeed
+    public float AngularDirection
     {
         get
         {
