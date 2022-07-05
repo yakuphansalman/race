@@ -15,16 +15,17 @@ namespace AI
 
         #endregion
 
-        [SerializeField] private Vector3[] _obsDeltas;
-        [SerializeField] private Vector3[] _pathDeltas;
+        private Vector3[] _obsDeltas;
+        private Vector3 _pathDelta;
 
-        [SerializeField] private float[] _obsDeltaMags;
-        [SerializeField] private float[] _pathDeltaMags;
-        [SerializeField] private float _activeDelta;
+        private float[] _obsDeltaMags;
+        private float _activeDelta;
+        private float _dot;
 
         public float[] ObsDeltaMags => _obsDeltaMags;
-        public float[] PathDeltaMags => _pathDeltaMags;
+        public Vector3 PathDelta => _pathDelta;
         public float ActiveDelta => _activeDelta;
+        public float Dot => _dot;
         public int RayCount => _rayCount;
 
         private void Start()
@@ -33,8 +34,6 @@ namespace AI
             _hits = new RaycastHit[_rayCount];
             _obsDeltas = new Vector3[_rayCount];
             _obsDeltaMags = new float[_rayCount];
-            _pathDeltas = new Vector3[RayCount];
-            _pathDeltaMags = new float[_rayCount];
         }
 
         private void FixedUpdate()
@@ -84,11 +83,16 @@ namespace AI
                     }
                     if (_hits[i].collider.tag == "Path")
                     {
-                        if (i == 0 || i == 2)
+                        for (int j = 0; j < 3; j += 2)
                         {
-                            _pathDeltas[i] = _hits[i].collider.ClosestPoint(transform.position) - transform.position;
-                            _pathDeltaMags[i] = _pathDeltas[i].magnitude;
-                            Debug.DrawRay(transform.position, new Vector3(_hits[i].collider.transform.localPosition.x - transform.localPosition.x, 1, 0), new Color(0, 0, 255)); ;
+                            for (int k = 0; k < 3; k += 2)
+                            {
+                                if ((_hits[j].collider.transform.position - transform.position).magnitude > (_hits[k].collider.transform.position - transform.position).magnitude)
+                                {
+                                    _pathDelta = _hits[k].collider.ClosestPoint(transform.position) - transform.position;
+                                    _dot = Vector3.Dot(_hits[k].collider.transform.right, transform.position - _hits[k].transform.position);
+                                }
+                            }
                         }
                     }
                 }
