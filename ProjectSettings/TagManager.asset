@@ -9,6 +9,7 @@ TagManager:
   - Boundary
   - AI
   - Obstacle
+  - Path
   layers:
   - Default
   - TransparentFX

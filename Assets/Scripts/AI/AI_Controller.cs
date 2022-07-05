@@ -27,7 +27,6 @@ namespace AI
                 Brake(wheelCollider);
                 Accelerate(wheelCollider);
                 Steer(wheelCollider);
-                Debug.Log(wheelCollider.motorTorque);
             }
         }
 
@@ -36,6 +35,10 @@ namespace AI
             if (AI_Manager.Instance.CommAcc != 0)
             {
                 wheel.motorTorque = _aiPrefs.Force * AI_Manager.Instance.CommAcc * Mathf.Pow(1.1f , _sensor.ActiveDelta);
+            }
+            else
+            {
+                wheel.motorTorque = 0;
             }
         }
 

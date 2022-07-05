@@ -8,8 +8,10 @@ namespace AI
     {
         [SerializeField] private AI_Sensor _sensor;
 
+        private int[] _methodPriorities;
+
         #region Commands
-        [SerializeField] private float _commAcc = 1, _commSteer, _commBrake;
+        [SerializeField] private float _commAcc = 0, _commSteer, _commBrake;
 
         public float CommAcc => _commAcc;
         public float CommSteer => _commSteer;
@@ -46,67 +48,75 @@ namespace AI
         #endregion
 
 
+        private void Start()
+        {
+            _methodPriorities = new int[3];
+        }
         private void FixedUpdate()
         {
-            PreventCrashes();
+            //PreventCrashes();
         }
 
         #region Prioritized Methods
 
         private void PreventCrashes()
         {
+            
             for (int i = 0; i < _sensor.RayCount; i++)
             {
-                if (_sensor.DeltaMags[i] == Mathf.Max(_sensor.DeltaMags) && _sensor.DeltaMags[i] >= 25f)
+                if (_sensor.ObsDeltaMags[i] == Mathf.Min(_sensor.ObsDeltaMags))
                 {
-                    if (i == 1 || i == 4)
+                    if (_sensor.ObsDeltaMags[i] < 3f)
                     {
+                        _methodPriorities[0] = 0;
+                        if (i == 0)
+                        {
+                            _commBrake = 5;
+                            _commSteer = -2;
+                        }
+                        else if (i == 2)
+                        {
+                            _commBrake = 5;
+                            _commSteer = 2;
+                        }
+                        else if (i == 1 || i == 4)
+                        {
+                            _commSteer = 0;
+                            _commBrake = 10;
+                        }
+                    }
+                    else if (_sensor.ObsDeltaMags[i] < 4f)
+                    {
+                        _methodPriorities[0] = 0;
+                        if (i == 3)
+                        {
+                            _commBrake = 2;
+                            _commSteer = -1;
+                        }
+                        if (i == 5)
+                        {
+                            _commBrake = 2;
+                            _commSteer = 1;
+                        }
+                    }
+                    else if (i != 0 && i != 1 && i != 2 && i != 3 && i != 4 && i != 5)
+                    {
+                        _methodPriorities[0]++;
                         _commAcc = 1;
                         _commBrake = 0;
                         _commSteer = 0;
                     }
                 }
-                else if (_sensor.DeltaMags[i] == Mathf.Min(_sensor.DeltaMags))
+            }
+        }
+
+        private void SyncPath()
+        {
+            for (int i = 0; i < _sensor.RayCount - 3; i++)
+            {
+                if (_sensor.PathDeltaMags[i] < 3f)
                 {
-                    if (_sensor.DeltaMags[i] < 5f && i == 0 && i == 2)
-                    {
-                        if (i == 0)
-                        {
-                            _commBrake = 0;
-                            _commSteer = -1;
-                        }
-                        else if (i == 2)
-                        {
-                            _commBrake = 0;
-                            _commSteer = 1;
-                        }
-                    }
-                    if (_sensor.DeltaMags[i] < 25f)
-                    {
-                        if (i == 1 || i == 4)
-                        {
-                            _commSteer = 0;
-                            _commBrake = 10;
-                        }
 
-                        else if (i == 3)
-                        {
-                            _commBrake = 1;
-                            _commSteer = -1;
-                        }
-                        else if (i == 5)
-                        {
-                            _commBrake = 1;
-                            _commSteer = 1;
-                        }
-                    }
-
-                    else if (i != 0 && i != 1 && i != 2 && i != 3 && i != 4 && i != 5)
-                    {
-                        _commAcc = 1;
-                        _commBrake = 0;
-                        _commSteer = 0;
-                    }
                 }
             }
         }
