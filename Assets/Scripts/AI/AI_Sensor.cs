@@ -81,20 +81,6 @@ namespace AI
                             _activeDelta = _obsDeltaMags[i];
                         }
                     }
-                    if (_hits[i].collider.tag == "Path")
-                    {
-                        for (int j = 0; j < 3; j += 2)
-                        {
-                            for (int k = 0; k < 3; k += 2)
-                            {
-                                if ((_hits[j].collider.transform.position - transform.position).magnitude > (_hits[k].collider.transform.position - transform.position).magnitude)
-                                {
-                                    _pathDelta = _hits[k].collider.ClosestPoint(transform.position) - transform.position;
-                                    _dot = Vector3.Dot(_hits[k].collider.transform.right, transform.position - _hits[k].transform.position);
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }

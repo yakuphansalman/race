@@ -49,8 +49,7 @@ namespace AI
 
         private void FixedUpdate()
         {
-            //PreventCrashes();
-            SyncPath();
+            PreventCrashes();
         }
 
 
@@ -91,25 +90,6 @@ namespace AI
                             _commSteer = 1;
                         }
                     }
-                }
-            }
-        }
-
-        private void SyncPath()
-        {
-            for (int i = 0; i < _sensor.RayCount - 3; i +=2)
-            {
-                if (_sensor.Dot < -3f)
-                {
-                    _commSteer = -0.5f / _sensor.ActiveDelta;
-                }
-                if (_sensor.Dot > 3f)
-                {
-                    _commSteer = 0.5f /_sensor.ActiveDelta;
-                }
-                else
-                {
-                    _commAcc = 1;
                 }
             }
         }
