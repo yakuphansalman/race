@@ -56,57 +56,74 @@ namespace AI
         }
         private void FixedUpdate()
         {
-            //PreventCrashes();
+            Debug.Log(_sensor.ObsDetected);
+            if (_sensor.ObsDetected)
+            {
+                PreventCrashes();
+            }
+            if (_path.ShouldBrake)
+            {
+                _commBrake = 1;
+            }
+            else
+            {
+                _commBrake = 0;
+            }
         }
 
 
-        //private void PreventCrashes()
-        //{
-        //    for (int i = 0; i < _sensor.RayCount; i++)
-        //    {
-        //        if (_sensor.ObsDeltaMags[i] == Mathf.Min(_sensor.ObsDeltaMags))
-        //        {
-        //            if (_sensor.ObsDeltaMags[i] < 2f)
-        //            {
-        //                if (i == 0)
-        //                {
-        //                    _commBrake = 5;
-        //                    _commSteer = -2;
-        //                }
-        //                else if (i == 2)
-        //                {
-        //                    _commBrake = 5;
-        //                    _commSteer = 2;
-        //                }
-        //                else if (i == 1 || i == 4)
-        //                {
-        //                    _commSteer = 0;
-        //                    _commBrake = 100;
-        //                }
-        //            }
-        //            else if (_sensor.ObsDeltaMags[i] < 3f)
-        //            {
-        //                if (i == 3)
-        //                {
-        //                    _commBrake = 2;
-        //                    _commSteer = -1;
-        //                }
-        //                if (i == 5)
-        //                {
-        //                    _commBrake = 2;
-        //                    _commSteer = 1;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        private void PreventCrashes()
+        {
+            for (int i = 0; i < _sensor.RayCount; i++)
+            {
+                if (_sensor.ObsDeltaMags[i] == Mathf.Min(_sensor.ObsDeltaMags))
+                {
+                    if (_sensor.ObsDeltaMags[i] < _sensor.RayRange)
+                    {
+                        if (i == 0)
+                        {
+                            _commBrake = 1;
+                            _commSteer = -1;
+                        }
+                        else if (i == 2)
+                        {
+                            _commBrake = 1;
+                            _commSteer = 1;
+                        }
+                        else if (i == 1 || i == 4)
+                        {
+                            _commSteer = 0;
+                            _commBrake = 1;
+                        }
+                        else if (i == 3)
+                        {
+                            _commBrake = 2;
+                            _commSteer = -1;
+                        }
+                        else if (i == 5)
+                        {
+                            _commBrake = 2;
+                            _commSteer = 1;
+                        }
+                    }
+                }
+            }
+        }
         public float SteeringForce
         {
             get
             {
-                Vector3 relativeVector = _car.transform.InverseTransformPoint(_path.TargetNode);
-                _steeringForce = relativeVector.x / relativeVector.magnitude;
-                return _steeringForce;
+                if (_sensor.ObsDetected)
+                {
+                    Debug.Log(_commSteer);
+                    return -_commSteer;
+                }
+                else
+                {
+                    Vector3 relativeVector = _car.transform.InverseTransformPoint(_path.TargetNode);
+                    _steeringForce = relativeVector.x / relativeVector.magnitude;
+                    return _steeringForce;
+                }
             }
         }
     }

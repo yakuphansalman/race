@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _force: 300
   _brakeForce: 1000
-  _rotationForce: 30
+  _angularForce: 50
   _forceLimit: 150
-  _centripitalForceMultiplier: 1
   _gearLimits:
   - 0
   - 4

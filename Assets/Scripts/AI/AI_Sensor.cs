@@ -10,6 +10,8 @@ namespace AI
 
         [SerializeField] private int _rayCount;
 
+        [SerializeField] private float _rayRange;
+
         private Ray[] _rays;
         private RaycastHit[] _hits;
 
@@ -26,7 +28,9 @@ namespace AI
         public Vector3 PathDelta => _pathDelta;
         public float ActiveDelta => _activeDelta;
         public float Dot => _dot;
+        public float RayRange => _rayRange;
         public int RayCount => _rayCount;
+
 
         private void Start()
         {
@@ -51,16 +55,16 @@ namespace AI
             {
                 if (i == 4)
                 {
-                    _rays[i] = new Ray(transform.position, 200 * (transform.right * Mathf.Round(Mathf.Cos((pi / 2) * ((i-3) % 3))) + transform.forward * Mathf.Round(Mathf.Sin(90 * ((i - 3) % 2)))));
+                    _rays[i] = new Ray(transform.position, _rayRange * (transform.right * Mathf.Round(Mathf.Cos((pi / 2) * ((i-3) % 3))) + transform.forward * Mathf.Round(Mathf.Sin(90 * ((i - 3) % 2)))));
                 }
                 else
                 {
-                    _rays[i] = new Ray(transform.position, 200 * (transform.right * Mathf.Round(Mathf.Cos((pi / 2) * (i % 3))) + transform.forward * Mathf.Round(Mathf.Sin(90 * (i % 2)))));
+                    _rays[i] = new Ray(transform.position, _rayRange * (transform.right * Mathf.Round(Mathf.Cos((pi / 2) * (i % 3))) + transform.forward * Mathf.Round(Mathf.Sin(90 * (i % 2)))));
                 }
-                Physics.Raycast(_rays[i], out _hits[i], 200);
+                Physics.Raycast(_rays[i], out _hits[i], _rayRange);
 
 
-                Debug.DrawRay(_rays[i].origin, _rays[i].direction * 200, new Color(255, 0, 0));
+                Debug.DrawRay(_rays[i].origin, _rays[i].direction * _rayRange, new Color(255, 0, 0));
 
             }
         }
@@ -69,7 +73,6 @@ namespace AI
         {
             for (int i = 0; i < _rayCount; i++)
             {
-
                 if (_hits[i].collider != null)
                 {
                     if (_hits[i].collider.tag == "Obstacle" || _hits[i].collider.tag == "Boundary")
@@ -82,6 +85,27 @@ namespace AI
                         }
                     }
                 }
+            }
+        }
+        private bool IsObsDetected()
+        {
+            for (int i = 0; i < _rayCount; i++)
+            {
+                if (_hits[i].collider != null)
+                {
+                    if (_hits[i].collider.tag == "Obstacle" || _hits[i].collider.tag == "Boundary")
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public bool ObsDetected
+        {
+            get
+            {
+                return IsObsDetected();
             }
         }
     }
