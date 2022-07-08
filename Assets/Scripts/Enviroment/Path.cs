@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class Path : MonoBehaviour
 {
+    [SerializeField] private GameObject _car;
+
     public Color lineColor;
 
     private List<Transform> _nodes = new List <Transform>();
 
-    private void OnDrawGizmosSelected()
+    private Vector3 _targetNode;
+
+    public Vector3 TargetNode => _targetNode;
+    private void OnDrawGizmos()
     {
         Gizmos.color = lineColor;
 
@@ -17,7 +22,7 @@ public class Path : MonoBehaviour
 
         for (int i = 0; i < pathTransforms.Length; i++)
         {
-            if (pathTransforms[i] != transform)
+            if (pathTransforms[i] != transform && pathTransforms[i].position != Vector3.zero)
             {
                 _nodes.Add(pathTransforms[i]);
             }
@@ -32,12 +37,34 @@ public class Path : MonoBehaviour
             }
             else if (i == 0 && _nodes.Count > 1)
             {
-                previousNode = _nodes[_nodes.Count - 1].position;
+                previousNode = _nodes[_nodes.Count - 1].position; 
             }
             Gizmos.DrawLine(previousNode, currentNode);
             Gizmos.DrawSphere(currentNode, 0.3f);
-            Debug.Log(previousNode + " c= " + currentNode);
         }
-
+    }
+    private void Update()
+    {
+        DetermineNextNode();
+    }
+    private void DetermineNextNode()
+    {
+        for (int i = 0; i < _nodes.Count; i++)
+        {
+            Debug.DrawRay(_car.transform.position, _targetNode, Color.blue);
+            float nodeRadius = 5f;
+            float delta = (_nodes[i].position - _car.transform.position).magnitude;
+            if (delta < nodeRadius)
+            {
+                if (i < _nodes.Count - 1)
+                {
+                    _targetNode = _nodes[i + 1].position;
+                }
+                else if (i == _nodes.Count - 1)
+                {
+                    _targetNode = _nodes[0].position;
+                }
+            }
+        }
     }
 }

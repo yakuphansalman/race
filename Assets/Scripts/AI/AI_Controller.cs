@@ -24,7 +24,6 @@ namespace AI
         {
             foreach (var wheelCollider in _wheels)
             {
-                Brake(wheelCollider);
                 Accelerate(wheelCollider);
                 Steer(wheelCollider);
             }
@@ -34,7 +33,7 @@ namespace AI
         {
             if (AI_Manager.Instance.CommAcc != 0)
             {
-                wheel.motorTorque = _aiPrefs.Force * AI_Manager.Instance.CommAcc * Mathf.Pow(1.1f , _sensor.ActiveDelta);
+                wheel.motorTorque = _aiPrefs.Force * AI_Manager.Instance.CommAcc;
             }
             else
             {
@@ -44,11 +43,12 @@ namespace AI
 
         private void Steer(WheelCollider wheel)
         {
+            Debug.Log(AI_Manager.Instance.SteeringForce);
             for (int i = 0; i < 2; i++)
             {
                 if (wheel == _wheels[i])
                 {
-                    wheel.steerAngle = _aiPrefs.AngularForce * AI_Manager.Instance.CommSteer / _sensor.ActiveDelta;
+                    wheel.steerAngle = _aiPrefs.AngularForce * AI_Manager.Instance.SteeringForce;
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace AI
         {
             if (AI_Physics.Instance.Direction > 0 && AI_Manager.Instance.CommBrake > 0)
             {
-                wheel.motorTorque -= _aiPrefs.BrakeForce * AI_Manager.Instance.CommBrake / _sensor.ActiveDelta;
+                wheel.motorTorque = -_aiPrefs.BrakeForce * AI_Manager.Instance.CommBrake;
             }
         }
     }
