@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI
+
+namespace Player
 {
-    public class AI_Manager : MonoBehaviour
+    public class Player_Physics : Car_Physics
     {
     }
 }

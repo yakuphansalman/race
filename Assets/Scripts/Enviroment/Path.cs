@@ -10,6 +10,8 @@ namespace AI
 
         private List<Transform> _nodes = new List<Transform>();
 
+        [SerializeField] private float _nodeRadius;
+
         private Vector3 _targetNode;
 
 
@@ -46,9 +48,8 @@ namespace AI
         {
             for (int i = 0; i < _nodes.Count; i++)
             {
-                float nodeRadius = 5f;
                 float delta = (_nodes[i].position - _car.transform.position).magnitude;
-                if (delta < nodeRadius && i != 0 && AI_Physics.Instance.Speed > 3f)
+                if (delta < _nodeRadius && i != 0 && AI_Physics.Instance.Speed > 3f)
                 {
                     if (!_car.GetComponent<AI_Sensor>().ObsDetected)
                     {

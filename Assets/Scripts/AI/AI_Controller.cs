@@ -4,64 +4,33 @@ using UnityEngine;
 
 namespace AI
 {
-    public class AI_Controller : MonoBehaviour
+    public class AI_Controller : Car_Controller
     {
-        [SerializeField] private WheelCollider[] _wheels;
-        [SerializeField] private AI_Preferences_SO _aiPrefs;
-        [SerializeField] private AI_Sensor _sensor;
+        private AI_Director _director;
 
-        #region Variables
-
-
-        #endregion
-
-        #region Encapsulated Variables
-
-
-        #endregion
-
-        private void Update()
+        private void Start()
         {
-            foreach (var wheelCollider in _wheels)
-            {
-                Accelerate(wheelCollider);
-                Steer(wheelCollider);
-                Brake(wheelCollider);
-            }
+            _director = GetComponent<AI_Director>();
         }
-
-        private void Accelerate(WheelCollider wheel)
+        protected override float Steer()
         {
-            if (AI_Manager.Instance.CommAcc != 0 && AI_Physics.Instance.Speed < _aiPrefs.ForceLimit/10)
-            {
-                wheel.motorTorque = _aiPrefs.Force * AI_Manager.Instance.CommAcc;
-            }
-            else
-            {
-                wheel.motorTorque = 0;
-            }
+            return _carPrefs.AngularForce * _director.SteeringForce / base.AntiSteer(AI_Physics.Instance.Speed);
         }
-
-        private void Steer(WheelCollider wheel)
+        protected override float Accelerate()
         {
-            for (int i = 0; i < 2; i++)
+            if (_director.CommAcc != 0 && AI_Physics.Instance.Speed < _carPrefs.ForceLimit / 10)
             {
-                if (wheel == _wheels[i])
-                {
-                    wheel.steerAngle = _aiPrefs.AngularForce * AI_Manager.Instance.SteeringForce / Mathf.Pow(1.9f, Mathf.Sqrt(AI_Physics.Instance.Speed));
-                }
+                return _carPrefs.Force * _director.CommAcc;
             }
+            return 0;
         }
-        private void Brake(WheelCollider wheel)
+        protected override float Brake()
         {
-            if (AI_Manager.Instance.CommBrake > 0)
+            if (_director.CommBrake > 0)
             {
-                wheel.brakeTorque = _aiPrefs.BrakeForce * AI_Manager.Instance.CommBrake;
+                return _carPrefs.BrakeForce * _director.CommBrake;
             }
-            else
-            {
-                wheel.brakeTorque = 0;
-            }
+            return 0;
         }
     }
 }

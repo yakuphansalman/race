@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Car_Controller : MonoBehaviour
+public abstract class Car_Controller : MonoBehaviour
 {
-    [SerializeField] private Car_Preferences_SO _carPrefs = null;
-    [SerializeField] private WheelCollider[] _wheels;
+    [SerializeField] private protected Car_Preferences_SO _carPrefs = null;
+    [SerializeField] private protected WheelCollider[] _wheels;
 
     #region Singleton
     private static Car_Controller instance = null;
@@ -23,60 +23,33 @@ public class Car_Controller : MonoBehaviour
 
     private void Awake()
     {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
+        instance = this;
     }
     #endregion
 
     
     private void Update()
     {
+        Control();
+    }
+
+    protected abstract float Steer();
+    protected abstract float Accelerate();
+    protected abstract float Brake();
+    protected virtual float AntiSteer(float speed)
+    {
+        return Mathf.Pow(2f, Mathf.Sqrt(speed));
+    }
+
+    private void Control()
+    {
         foreach (var wheelCollider in _wheels)
         {
-            Accelerate(wheelCollider);
-            Steer(wheelCollider);
-            Brake(wheelCollider);
-            Debug.Log(wheelCollider.steerAngle);
-        }
-    }
-
-    private void Steer(WheelCollider wheel)
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            if (wheel == _wheels[i])
+            if (wheelCollider == _wheels[0] || wheelCollider == _wheels[1])
             {
-                wheel.steerAngle = _carPrefs.AngularForce * Input_Manager.Instance.I_Horizontal / Mathf.Pow(1.9f, Mathf.Sqrt(Car_Physics.Instance.Speed));
+                wheelCollider.steerAngle = Steer();
             }
-        }
-
-    }
-    private void Accelerate(WheelCollider wheel)
-    {
-        if (Car_Physics.Instance.Speed < _carPrefs.ForceLimit /10)
-        {
-            wheel.motorTorque = _carPrefs.Force * Input_Manager.Instance.I_Vertical * Car_Mechanics.Instance.GearForce;
-        }
-        else
-        {
-            wheel.motorTorque = 0;
-        }
-    }
-    private void Brake(WheelCollider wheel)
-    {
-        if (Input_Manager.Instance.I_Vertical < 0 && Car_Physics.Instance.Direction >0)
-        {
-            wheel.brakeTorque = _carPrefs.BrakeForce;
-        }
-        else
-        {
-            wheel.brakeTorque = 0;
+            wheelCollider.motorTorque = Accelerate();
         }
     }
 }

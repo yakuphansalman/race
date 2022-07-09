@@ -30,7 +30,8 @@ public class Camera_Controller : MonoBehaviour
     {
         if (Car_Physics.Instance.Direction > 0)
         {
-            float posZ = Mathf.Lerp(_offset.z, _offset.z - 2f, (Car_Physics.Instance.Speed) / 15);
+            float speed = GameObject.Find("Car").GetComponent<Rigidbody>().velocity.magnitude;
+            float posZ = Mathf.Lerp(_offset.z, _offset.z - 2f, speed / 15);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, posZ);
             
         }

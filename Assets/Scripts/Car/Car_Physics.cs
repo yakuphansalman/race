@@ -42,7 +42,7 @@ public class Car_Physics : MonoBehaviour
 
     private void Start()
     {
-        _rB = gameObject.GetComponent<Rigidbody>();
+        _rB = this.gameObject.GetComponent<Rigidbody>();
     }
     private void Update()
     {
