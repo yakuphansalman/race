@@ -54,7 +54,7 @@ namespace AI
         }
         private void Brake(WheelCollider wheel)
         {
-            if (AI_Physics.Instance.Direction > 0 && AI_Manager.Instance.CommBrake > 0)
+            if (AI_Manager.Instance.CommBrake > 0)
             {
                 wheel.brakeTorque = _aiPrefs.BrakeForce * AI_Manager.Instance.CommBrake;
             }

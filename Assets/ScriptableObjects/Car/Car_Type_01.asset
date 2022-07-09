@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f63547b201354b47ab563415458440b, type: 3}
   m_Name: Car_Type_01
   m_EditorClassIdentifier: 
-  _force: 300
-  _brakeForce: 400
-  _angularForce: 30
-  _forceLimit: 220
+  _force: 425
+  _brakeForce: 700
+  _angularForce: 45
+  _forceLimit: 300
   _gearLimits:
   - 0
   - 4

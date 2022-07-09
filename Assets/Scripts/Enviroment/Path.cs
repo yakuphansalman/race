@@ -8,22 +8,65 @@ namespace AI
     {
         [SerializeField] private GameObject _car;
 
-        public Color lineColor;
-
         private List<Transform> _nodes = new List<Transform>();
 
         private Vector3 _targetNode;
 
-        private bool _shouldBrake;
-
 
         public Vector3 TargetNode => _targetNode;
-
-        public bool ShouldBrake => _shouldBrake;
-        private void OnDrawGizmos()
+        private void FixedUpdate()
         {
-            Gizmos.color = lineColor;
-
+            SetDestination();
+        }
+        private void Update()
+        {
+            DetermineNextNode();
+        }
+        private void DetermineNextNode()
+        {
+            for (int i = 0; i < _nodes.Count; i++)
+            {
+                Debug.DrawRay(_car.transform.position, _targetNode, Color.blue);
+                float nodeRadius = 25f;
+                float delta = (_nodes[i].position - _car.transform.position).magnitude;
+                if (delta < nodeRadius)
+                {
+                    if (i < _nodes.Count - 1)
+                    {
+                        _targetNode = _nodes[i + 1].position;
+                    }
+                    else if (i == _nodes.Count - 1)
+                    {
+                        _targetNode = _nodes[0].position;
+                    }
+                }
+            }
+        }
+        private bool CheckShouldBrake()
+        {
+            for (int i = 0; i < _nodes.Count; i++)
+            {
+                float nodeRadius = 25f;
+                float delta = (_nodes[i].position - _car.transform.position).magnitude;
+                if (delta < nodeRadius)
+                {
+                    if (!_car.GetComponent<AI_Sensor>().ObsDetected)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public bool ShouldBrake
+        {
+            get
+            {
+                return CheckShouldBrake();
+            }
+        }
+        private void SetDestination()
+        {
             Transform[] pathTransforms = GetComponentsInChildren<Transform>();
             _nodes = new List<Transform>();
 
@@ -45,43 +88,6 @@ namespace AI
                 else if (i == 0 && _nodes.Count > 1)
                 {
                     previousNode = _nodes[_nodes.Count - 1].position;
-                }
-                Gizmos.DrawLine(previousNode, currentNode);
-                Gizmos.DrawSphere(currentNode, 0.3f);
-            }
-        }
-        private void Update()
-        {
-            DetermineNextNode();
-        }
-        private void DetermineNextNode()
-        {
-            for (int i = 0; i < _nodes.Count; i++)
-            {
-                Debug.DrawRay(_car.transform.position, _targetNode, Color.blue);
-                float nodeRadius = 15f;
-                float delta = (_nodes[i].position - _car.transform.position).magnitude;
-                if (delta < nodeRadius)
-                {
-                    if (!_car.GetComponent<AI_Sensor>().ObsDetected)
-                    {
-                        _shouldBrake = true;
-                    }
-                    if (i < _nodes.Count - 1)
-                    {
-                        _targetNode = _nodes[i + 1].position;
-                    }
-                    else if (i == _nodes.Count - 1)
-                    {
-                        _targetNode = _nodes[0].position;
-                    }
-                }
-                else
-                {
-                    if (!_car.GetComponent<AI_Sensor>().ObsDetected)
-                    {
-                        _shouldBrake = false;
-                    }
                 }
             }
         }
