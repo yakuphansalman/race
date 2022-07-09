@@ -10,7 +10,7 @@ public class Lap_Manager : MonoBehaviour
 
     private static protected int _pointSize;
     private static protected int _sectorSize;
-    private const int _lapSize = 1;
+    private const int _lapSize = 5;
     private static protected int _currentLap = -1;
     private static protected int _currentSector = -1;
 

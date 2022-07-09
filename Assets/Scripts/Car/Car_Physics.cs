@@ -35,14 +35,7 @@ public class Car_Physics : MonoBehaviour
     }
     private void Awake()
     {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
+        instance = this;
     }
 
     #endregion

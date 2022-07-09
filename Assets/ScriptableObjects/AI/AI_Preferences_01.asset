@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: AI_Preferences_01
   m_EditorClassIdentifier: 
   _force: 300
-  _brakeForce: 150
-  _angularForce: 50
+  _brakeForce: 70
+  _angularForce: 40
   _forceLimit: 150
   _gearLimits:
   - 0

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Car_Type_01
   m_EditorClassIdentifier: 
   _force: 300
-  _brakeForce: 1000
-  _angularForce: 50
-  _forceLimit: 150
+  _brakeForce: 400
+  _angularForce: 30
+  _forceLimit: 220
   _gearLimits:
   - 0
   - 4

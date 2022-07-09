@@ -58,7 +58,10 @@ public class Car_Controller : MonoBehaviour
     }
     private void Accelerate(WheelCollider wheel)
     {
-        wheel.motorTorque = _carPrefs.Force * Input_Manager.Instance.I_Vertical * Car_Mechanics.Instance.GearForce;
+        if (wheel.motorTorque < _carPrefs.ForceLimit)
+        {
+            wheel.motorTorque = _carPrefs.Force * Input_Manager.Instance.I_Vertical * Car_Mechanics.Instance.GearForce;
+        }
     }
     private void Brake(WheelCollider wheel)
     {
