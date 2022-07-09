@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba56358e30ccc5741867573a63e371b1, type: 3}
   m_Name: AI_Preferences_01
   m_EditorClassIdentifier: 
-  _force: 450
-  _brakeForce: 5000
-  _angularForce: 55
+  _force: 350
+  _brakeForce: 200
+  _angularForce: 60
   _forceLimit: 150
   _gearLimits:
   - 0

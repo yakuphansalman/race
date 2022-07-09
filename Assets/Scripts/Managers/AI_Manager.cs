@@ -56,7 +56,6 @@ namespace AI
         }
         private void FixedUpdate()
         {
-            Debug.Log(_commBrake);
             if (_sensor.ObsDetected)
             {
                 PreventCrashes();

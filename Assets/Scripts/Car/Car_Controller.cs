@@ -40,34 +40,43 @@ public class Car_Controller : MonoBehaviour
         foreach (var wheelCollider in _wheels)
         {
             Accelerate(wheelCollider);
-            Rotate(wheelCollider);
+            Steer(wheelCollider);
             Brake(wheelCollider);
+            Debug.Log(wheelCollider.steerAngle);
         }
     }
 
-    private void Rotate(WheelCollider wheel)
+    private void Steer(WheelCollider wheel)
     {
         for (int i = 0; i < 2; i++)
         {
             if (wheel == _wheels[i])
             {
-                wheel.steerAngle = _carPrefs.AngularForce * Input_Manager.Instance.I_Horizontal / Mathf.Pow(Car_Mechanics.Instance.GearForce, Mathf.Sqrt(Car_Physics.Instance.Speed));
+                wheel.steerAngle = _carPrefs.AngularForce * Input_Manager.Instance.I_Horizontal / Mathf.Pow(1.9f, Mathf.Sqrt(Car_Physics.Instance.Speed));
             }
         }
 
     }
     private void Accelerate(WheelCollider wheel)
     {
-        if (wheel.motorTorque < _carPrefs.ForceLimit)
+        if (Car_Physics.Instance.Speed < _carPrefs.ForceLimit /10)
         {
             wheel.motorTorque = _carPrefs.Force * Input_Manager.Instance.I_Vertical * Car_Mechanics.Instance.GearForce;
+        }
+        else
+        {
+            wheel.motorTorque = 0;
         }
     }
     private void Brake(WheelCollider wheel)
     {
-        if (Input_Manager.Instance.I_Vertical < 0)
+        if (Input_Manager.Instance.I_Vertical < 0 && Car_Physics.Instance.Direction >0)
         {
-            wheel.motorTorque = _carPrefs.BrakeForce * -1;
+            wheel.brakeTorque = _carPrefs.BrakeForce;
+        }
+        else
+        {
+            wheel.brakeTorque = 0;
         }
     }
 }
