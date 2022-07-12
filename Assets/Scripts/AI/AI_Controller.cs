@@ -7,30 +7,28 @@ namespace AI
     public class AI_Controller : Car_Controller
     {
         private AI_Director _director;
+        private AI_Physics _physics;
 
         private void Start()
         {
             _director = GetComponent<AI_Director>();
+            _physics = GetComponent<AI_Physics>();
         }
         protected override float Steer()
         {
-            return _carPrefs.AngularForce * _director.SteeringForce / base.AntiSteer(AI_Physics.Instance.Speed);
+            return _carPrefs.AngularForce * _director.CommandSteer / base.AntiSteer(_physics.Speed);
         }
         protected override float Accelerate()
         {
-            if (_director.CommAcc != 0 && AI_Physics.Instance.Speed < _carPrefs.ForceLimit / 10)
+            if (AI_Physics.Instance.Speed < _carPrefs.ForceLimit / 10)
             {
-                return _carPrefs.Force * _director.CommAcc;
+                return _carPrefs.Force * _director.CommandAccelerate;
             }
             return 0;
         }
         protected override float Brake()
         {
-            if (_director.CommBrake > 0)
-            {
-                return _carPrefs.BrakeForce * _director.CommBrake;
-            }
-            return 0;
+            return _carPrefs.BrakeForce * _director.CommandBrake;
         }
     }
 }

@@ -2,19 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace AI
 {
-    public class Path : MonoBehaviour
+    public class AI_Path : MonoBehaviour
     {
-        [SerializeField] private GameObject _car;
-
         private List<Transform> _nodes = new List<Transform>();
 
-        [SerializeField] private float _nodeRadius;
+        [SerializeField] float _nodeRadius;
 
         private Vector3 _targetNode;
-
-
         public Vector3 TargetNode => _targetNode;
         private void FixedUpdate()
         {
@@ -28,10 +25,8 @@ namespace AI
         {
             for (int i = 0; i < _nodes.Count; i++)
             {
-                Debug.DrawRay(_car.transform.position, _targetNode, Color.blue);
-                float nodeRadius = 25f;
-                float delta = (_nodes[i].position - _car.transform.position).magnitude;
-                if (delta < nodeRadius)
+                float delta = (_nodes[i].position - transform.position).magnitude;
+                if (delta < _nodeRadius)
                 {
                     if (i < _nodes.Count - 1)
                     {
@@ -44,31 +39,9 @@ namespace AI
                 }
             }
         }
-        private bool CheckShouldBrake()
-        {
-            for (int i = 0; i < _nodes.Count; i++)
-            {
-                float delta = (_nodes[i].position - _car.transform.position).magnitude;
-                if (delta < _nodeRadius && i != 0 && AI_Physics.Instance.Speed > 3f)
-                {
-                    if (!_car.GetComponent<AI_Sensor>().ObsDetected)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        public bool ShouldBrake
-        {
-            get
-            {
-                return CheckShouldBrake();
-            }
-        }
         private void SetDestination()
         {
-            Transform[] pathTransforms = GetComponentsInChildren<Transform>();
+            Transform[] pathTransforms = GameObject.Find("Path").GetComponentsInChildren<Transform>();
             _nodes = new List<Transform>();
 
             for (int i = 0; i < pathTransforms.Length; i++)
@@ -94,3 +67,4 @@ namespace AI
         }
     }
 }
+

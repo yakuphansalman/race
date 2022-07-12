@@ -6,6 +6,7 @@ namespace AI
 {
     public class AI_Manager : MonoBehaviour
     {
+        
     }
 }
 

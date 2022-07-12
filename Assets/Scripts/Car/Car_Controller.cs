@@ -38,7 +38,7 @@ public abstract class Car_Controller : MonoBehaviour
     protected abstract float Brake();
     protected virtual float AntiSteer(float speed)
     {
-        return Mathf.Pow(2f, Mathf.Sqrt(speed));
+        return Mathf.Pow(1.5f, Mathf.Sqrt(speed));
     }
 
     private void Control()
@@ -50,6 +50,7 @@ public abstract class Car_Controller : MonoBehaviour
                 wheelCollider.steerAngle = Steer();
             }
             wheelCollider.motorTorque = Accelerate();
+            wheelCollider.brakeTorque = Brake();
         }
     }
 }
