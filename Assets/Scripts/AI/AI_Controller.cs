@@ -8,11 +8,13 @@ namespace AI
     {
         private AI_Director _director;
         private AI_Physics _physics;
+        private AI_Sensor _sensor;
 
         private void Start()
         {
             _director = GetComponent<AI_Director>();
             _physics = GetComponent<AI_Physics>();
+            _sensor = GetComponent<AI_Sensor>();
         }
         protected override float Steer()
         {
@@ -20,10 +22,16 @@ namespace AI
         }
         protected override float Accelerate()
         {
-            if (AI_Physics.Instance.Speed < _carPrefs.ForceLimit / 10)
+            if (_sensor.OnBrakePoint && _sensor.BrakePointType != 6)
+            {
+                Brake_Point brakePoint = _sensor.BrakePoints[_sensor.BrakePointType].GetComponent<Brake_Point>();
+                return brakePoint.SpeedLimit * _director.CommandAccelerate;
+            }
+            else if (_physics.Speed < _carPrefs.ForceLimit / 10)
             {
                 return _carPrefs.Force * _director.CommandAccelerate;
             }
+            
             return 0;
         }
         protected override float Brake()

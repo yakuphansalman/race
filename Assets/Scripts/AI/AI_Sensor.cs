@@ -15,22 +15,23 @@ namespace AI
         private Ray[] _rays;
         private Ray _antiBrakeRay;
         private RaycastHit[] _hits;
-        private RaycastHit _antiBrakeHit; 
+        private RaycastHit _antiBrakeHit;
 
         #endregion
 
+        private GameObject[] _brakePoints;
+
         private Vector3[] _obsDeltas;
-        private Vector3[] _brakePoints;
         private Vector3 _pathDelta;
 
         private float[] _obsDeltaMags;
         private float _activeDelta;
         private float _dot;
         private float _forwardDistance;
-        [SerializeField] private float _brakeAreaRadius;
 
         public float[] ObsDeltaMags => _obsDeltaMags;
         public Vector3 PathDelta => _pathDelta;
+        public GameObject[] BrakePoints => _brakePoints;
         public float ActiveDelta => _activeDelta;
         public float Dot => _dot;
         public float ForwardDistance => _forwardDistance;
@@ -44,10 +45,10 @@ namespace AI
             _hits = new RaycastHit[_rayCount];
             _obsDeltas = new Vector3[_rayCount];
             _obsDeltaMags = new float[_rayCount];
-            _brakePoints = new Vector3[GameObject.FindGameObjectsWithTag("Brake Point").Length];
+            _brakePoints = new GameObject[GameObject.FindGameObjectsWithTag("Brake Point").Length];
             for (int i = 0; i < _brakePoints.Length; i++)
             {
-                _brakePoints[i] = GameObject.FindGameObjectsWithTag("Brake Point")[i].transform.position;
+                _brakePoints[i] = GameObject.FindGameObjectsWithTag("Brake Point")[i];
             }
         }
 
@@ -118,7 +119,7 @@ namespace AI
         {
             for (int i = 0; i < _brakePoints.Length; i++)
             {
-                if ((_brakePoints[i] - transform.position).magnitude <_brakeAreaRadius)
+                if ((_brakePoints[i].transform.position - transform.position).magnitude < _brakePoints[i].GetComponent<Brake_Point>().AreaRadius)
                 {
                     return true;
                 }
@@ -139,8 +140,40 @@ namespace AI
             }
             return false;
         }
+        
         public bool OnBrakePoint => IsOnBrakePoint();
         public bool ObsDetected => IsObsDetected();
+        public int BrakePointType
+        {
+            get
+            {
+                for (int i = 0; i < _brakePoints.Length; i++)
+                {
+                    if ((_brakePoints[i].transform.position - transform.position).magnitude < _brakePoints[i].GetComponent<Brake_Point>().AreaRadius)
+                    {
+                        return i;
+                    }
+                }
+                return _brakePoints.Length;
+            }
+        }
+        public int DetectedObsType
+        {
+            get
+            {
+                for (int i = 0; i < _rayCount; i++)
+                {
+                    if (_hits[i].collider != null)
+                    {
+                        if (_hits[i].collider.tag == "Obstacle" || _hits[i].collider.tag == "Boundary")
+                        {
+                            return i;
+                        }
+                    }
+                }
+                return RayCount;
+            }
+        }
     }
 }
 

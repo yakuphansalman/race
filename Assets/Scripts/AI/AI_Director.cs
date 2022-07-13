@@ -25,27 +25,24 @@ namespace AI
             {
                 for (int i = 0; i < _sensor.RayCount; i++)
                 {
-                    if (_sensor.ObsDeltaMags[i] == Mathf.Min(_sensor.ObsDeltaMags))
+                    if (i == _sensor.DetectedObsType)
                     {
+                        float angularComm = 0.15f;
                         if (i == 0)
                         {
-                            return -1;
+                            return -angularComm;
                         }
                         if (i == 2)
                         {
-                            return 1;
-                        }
-                        if (i == 1 || i == 4)
-                        {
-                            return 0;
+                            return angularComm;
                         }
                         if (i == 3)
                         {
-                            return -1;
+                            return -angularComm;
                         }
                         if (i == 5)
                         {
-                            return 1;
+                            return angularComm;
                         }
                     }
                 }
@@ -55,9 +52,17 @@ namespace AI
         }
         private float DirectiveBrake()
         {
-            if (_sensor.OnBrakePoint && _physics.Speed > 8f)
+            if (_sensor.ObsDetected)
             {
-                return 1/_sensor.ForwardDistance;
+                return 0.1f;
+            }
+            else if (_sensor.OnBrakePoint &&_sensor.BrakePointType != 6)
+            {
+                Brake_Point brakePoint = _sensor.BrakePoints[_sensor.BrakePointType].GetComponent<Brake_Point>();
+                if (_physics.Speed > brakePoint.SpeedLimit)
+                {
+                    return 1 / _sensor.ForwardDistance;
+                }
             }
             return 0;
         }
