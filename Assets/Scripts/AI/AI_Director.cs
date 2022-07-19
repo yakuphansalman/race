@@ -9,11 +9,13 @@ namespace AI
         private AI_Sensor _sensor;
         private AI_Path _path;
         private AI_Physics _physics;
+        private Brake_Point[] _bPoints;
         private void Start()
         {
             _sensor = GetComponent<AI_Sensor>();
             _path = GetComponent<AI_Path>();
             _physics = GetComponent<AI_Physics>();
+            _bPoints = GameObject.Find("BrakePoints").GetComponentsInChildren<Brake_Point>();
         }
         private int DirectiveAccelerate()
         {
@@ -25,25 +27,18 @@ namespace AI
             {
                 for (int i = 0; i < _sensor.RayCount; i++)
                 {
-                    if (i == _sensor.DetectedObsType)
+                    float angularComm = 0.5f;
+                    if (i == 0 || i == 1)//Right sensors activated
                     {
-                        float angularComm = 0.15f;
-                        if (i == 0)
-                        {
-                            return -angularComm;
-                        }
-                        if (i == 2)
-                        {
-                            return angularComm;
-                        }
-                        if (i == 3)
-                        {
-                            return -angularComm;
-                        }
-                        if (i == 5)
-                        {
-                            return angularComm;
-                        }
+                        return -angularComm;//Turn Left
+                    }
+                    else if (i == 2 || i == 3)
+                    {
+                        return angularComm;//Turn Right
+                    }
+                    if (i == 0 && i == 2)
+                    {
+                        return 0;
                     }
                 }
             }
@@ -54,14 +49,14 @@ namespace AI
         {
             if (_sensor.ObsDetected)
             {
-                return 0.1f;
+                return 0.5f;
             }
-            else if (_sensor.OnBrakePoint &&_sensor.BrakePointType != 6)
+            for (int i = 0; i < _bPoints.Length; i++)
             {
-                Brake_Point brakePoint = _sensor.BrakePoints[_sensor.BrakePointType].GetComponent<Brake_Point>();
-                if (_physics.Speed > brakePoint.SpeedLimit)
+                float delta = (_bPoints[i].gameObject.transform.position - transform.position).magnitude;
+                if (delta < _bPoints[i].AreaRadius && _physics.Speed > _bPoints[i].SpeedLimit)
                 {
-                    return 1 / _sensor.ForwardDistance;
+                    return 1f;
                 }
             }
             return 0;

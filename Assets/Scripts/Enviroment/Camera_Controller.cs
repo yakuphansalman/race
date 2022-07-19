@@ -10,7 +10,7 @@ public class Camera_Controller : MonoBehaviour
 
     private void Start()
     {
-        _car = GameObject.Find("Car");
+        _car = transform.parent.gameObject;
         transform.localPosition = _offset;
     }
     private void Update()
@@ -30,7 +30,7 @@ public class Camera_Controller : MonoBehaviour
     {
         if (Car_Physics.Instance.Direction > 0)
         {
-            float speed = GameObject.Find("Car").GetComponent<Rigidbody>().velocity.magnitude;
+            float speed = _car.GetComponent<Rigidbody>().velocity.magnitude;
             float posZ = Mathf.Lerp(_offset.z, _offset.z - 2f, speed / 15);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, posZ);
             

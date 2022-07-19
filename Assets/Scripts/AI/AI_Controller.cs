@@ -22,12 +22,7 @@ namespace AI
         }
         protected override float Accelerate()
         {
-            if (_sensor.OnBrakePoint && _sensor.BrakePointType != 6)
-            {
-                Brake_Point brakePoint = _sensor.BrakePoints[_sensor.BrakePointType].GetComponent<Brake_Point>();
-                return brakePoint.SpeedLimit * _director.CommandAccelerate;
-            }
-            else if (_physics.Speed < _carPrefs.ForceLimit / 10)
+            if (_physics.Speed < _carPrefs.ForceLimit / 10)
             {
                 return _carPrefs.Force * _director.CommandAccelerate;
             }
