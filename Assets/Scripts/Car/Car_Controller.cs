@@ -40,6 +40,7 @@ public abstract class Car_Controller : MonoBehaviour
     {
         return Mathf.Pow(1.55f, Mathf.Sqrt(speed));
     }
+    protected abstract float SlipStreamSpeed();
 
     private void Control()
     {

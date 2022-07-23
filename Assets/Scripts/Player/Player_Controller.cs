@@ -19,7 +19,7 @@ namespace Player
         }
         protected override float Accelerate()
         {
-            if (Car_Physics.Instance.Speed < _carPrefs.ForceLimit / 10)
+            if (Car_Physics.Instance.Speed < _carPrefs.ForceLimit)
             {
                 return _carPrefs.Force * Input_Manager.Instance.I_Vertical;
             }
@@ -31,6 +31,11 @@ namespace Player
             {
                 return _carPrefs.BrakeForce;
             }
+            return 0;
+        }
+
+        protected override float SlipStreamSpeed()
+        {
             return 0;
         }
     }

@@ -12,12 +12,16 @@ public class Car_Preferences_SO : ScriptableObject
     [SerializeField] private float _brakeForce;
     [SerializeField] private float _angularForce;
     [SerializeField] private float _forceLimit;
+    [SerializeField] private float _slipstreamForce;
+    [SerializeField] private float _slipstreamRange;
 
 
     public float Force => _force;
     public float BrakeForce => _brakeForce;
     public float AngularForce => _angularForce;
     public float ForceLimit => _forceLimit;
+    public float SlipstreamForce => _slipstreamForce;
+    public float SlipstreamRange => _slipstreamRange;
     #endregion
 
     #region Physics

@@ -12,7 +12,9 @@ namespace AI
         [SerializeField] float _nodeRadius;
 
         private Vector3 _targetNode;
+        private Vector3 _targetDelta;
         public Vector3 TargetNode => _targetNode;
+        public Vector3 TargetDelta => _targetDelta;
         private void FixedUpdate()
         {
             SetDestination();
@@ -20,6 +22,7 @@ namespace AI
         private void Update()
         {
             DetermineNextNode();
+            _targetDelta = _targetNode - transform.position;
         }
         private void DetermineNextNode()
         {

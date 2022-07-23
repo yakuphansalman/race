@@ -22,7 +22,7 @@ namespace AI
         }
         protected override float Accelerate()
         {
-            if (_physics.Speed < _carPrefs.ForceLimit / 10)
+            if (_physics.Speed < _carPrefs.ForceLimit + SlipStreamSpeed())
             {
                 return _carPrefs.Force * _director.CommandAccelerate;
             }
@@ -32,6 +32,15 @@ namespace AI
         protected override float Brake()
         {
             return _carPrefs.BrakeForce * _director.CommandBrake;
+        }
+
+        protected override float SlipStreamSpeed()
+        {
+            if (_director.CommandSlipstream)
+            {
+                return _carPrefs.SlipstreamForce;
+            }
+            return 0;
         }
     }
 }

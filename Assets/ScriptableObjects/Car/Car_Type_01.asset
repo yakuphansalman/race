@@ -15,7 +15,9 @@ MonoBehaviour:
   _force: 1000
   _brakeForce: 175
   _angularForce: 45
-  _forceLimit: 240
+  _forceLimit: 24
+  _slipstreamForce: 3
+  _slipstreamRange: 50
   _gearLimits:
   - 0
   - 4

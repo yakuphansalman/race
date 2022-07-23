@@ -11,32 +11,36 @@ namespace AI
         [SerializeField] private int _rayCount;
 
         [SerializeField] private float _rayRange;
+        [SerializeField] private float _overtakeRange;
 
         private Ray[] _rays;
-        private Ray _antiBrakeRay;
         private RaycastHit[] _hits;
-        private RaycastHit _antiBrakeHit;
+        private RaycastHit[] _overtakeHits;
+
+        public RaycastHit[] OvertakeHits => _overtakeHits;
 
         #endregion
 
+
         private GameObject[] _brakePoints;
+        private GameObject _carFront;
 
         private Vector3[] _obsDeltas;
-        private Vector3 _pathDelta;
 
         private float[] _obsDeltaMags;
 
         public float[] ObsDeltaMags => _obsDeltaMags;
-        public Vector3 PathDelta => _pathDelta;
         public GameObject[] BrakePoints => _brakePoints;
+        public GameObject CarFront => _carFront;
         public float RayRange => _rayRange;
+        public float OvertakeRange => _overtakeRange;
         public int RayCount => _rayCount;
-
 
         private void Start()
         {
             _rays = new Ray[_rayCount];
             _hits = new RaycastHit[_rayCount];
+            _overtakeHits = new RaycastHit[2];
             _obsDeltas = new Vector3[_rayCount];
             _obsDeltaMags = new float[_rayCount];
             _brakePoints = new GameObject[GameObject.FindGameObjectsWithTag("Brake Point").Length];
@@ -45,27 +49,24 @@ namespace AI
                 _brakePoints[i] = GameObject.FindGameObjectsWithTag("Brake Point")[i];
             }
         }
-
         private void FixedUpdate()
         {
             CastRays();
             CheckObstacles();
         }
-
         private void CastRays()
         {
             //Linear => 1R , 3L
             //Cross => 0FR , 2FL
-
             float pi = 180 * Mathf.Deg2Rad;
+
             for (int i = 0; i < _rayCount; i++)
             {
-                float carWidth = 1f;
-                _rays[i] = new Ray(transform.position + new Vector3(carWidth * Mathf.Sin(pi * i/2), 0, 0), transform.forward + transform.right * Mathf.Cos(pi * i/2));
-
+                _rays[i] = new Ray(transform.position + transform.right * Mathf.Sin(pi * i / 2) * 0.5f, transform.forward + transform.right * Mathf.Cos(pi * i/2));
                 Physics.Raycast(_rays[i], out _hits[i], _rayRange);
                 Debug.DrawRay(_rays[i].origin, _rays[i].direction * _rayRange, new Color(255, 0, 0));
             }
+            
         }
 
         private void CheckObstacles()

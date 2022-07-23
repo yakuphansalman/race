@@ -11,6 +11,8 @@ TagManager:
   - Obstacle
   - Path
   - Brake Point
+  - Car_Collider
+  - AI_Collider
   layers:
   - Default
   - TransparentFX
